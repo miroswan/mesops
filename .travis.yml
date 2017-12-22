@@ -1,0 +1,16 @@
+language: go
+go:
+- 1.9
+
+install:
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+script:
+  - script/coveralls.sh
+  # - go test -v -covermode=count -coverprofile=coverage.out github.com/miroswan/mesops/pkg/v1/master
+  # - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+
+
+env:
+  global:
+    secure: ke0hbYg5RwslhtNJB5BZRdOtbhSSBM9wFWI2vvCSSQ9QT638EHIGvgC9e968U44c41gfbTrN/xd2rgFQSLXz2TZXiNw6W3/M00jlSVFukjXw2nl/F4ncrCi0eG/ZFd6UvXJa9MhiNkA0MSlPCSmFQFcRE/PRUvMPnEo65Pq0vrn594eLND+PxwUvAj78UPbjOp+dUMe3xdpYYA7zkPMIPfmTCWoPpVnEoDscJphPcIuffgI3otfN5T554Werx/4N3b1y469kgSIzJ1c0aMquBcrlEcd+0iqf3nmpejvO+88pmk7W806Od2CihtIWvQzmRjkZkzdhdZA5Tg0DNqk1Vskw5UOs2kwV2E9ABXrWz/Ay7iShxEfbLUlP5XOR/iItMffspTIndJCuy58YCVwPARr36NBoJL53A1+oPw9TeSK/xCCEYCG2XMtEGRQzT/c4pSj+RC3T7TqSRVEwXq6Osi/1Bd7s1uTItcYzJOydSoFdlTLJScficq9O7wgPezGZNPLKnynkuunte87df61ZmPB+usz+k4EMtcYkwnuzD1Or6dqARmFDoQtkyV/8aSnHSXya0GbvK6FoEXthiR0qLJdIPIH3RPY8+AcoeMgJElggfj/kgan2zhtwZu1/Q/GyeHWnfQ4LRSdOIxG/PQ+KmqkeGabyVbe+WtlMxEiJWjw=
