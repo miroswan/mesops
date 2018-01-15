@@ -100,7 +100,7 @@ For example:
   if err != nil {
     log.Fatal(err)
   }
-  fmt.Println("Successfully set quota for role1")
+  fmt.Println("Successfully set quota for test-role")
 }
 
 For the most part, you should not have to worry about HTTP when using this
