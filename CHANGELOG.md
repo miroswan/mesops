@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.2.0](https://github.com/miroswan/mesops/tree/v0.2.0) (2018-01-15)
+[Full Changelog](https://github.com/miroswan/mesops/compare/v0.1.0...v0.2.0)
+
 ## [v0.1.0](https://github.com/miroswan/mesops/tree/v0.1.0) (2018-01-02)
 
 
