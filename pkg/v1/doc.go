@@ -67,11 +67,11 @@ For example:
 
   // Build Call_SetQuota
   force := false
-	role := "test-role"
-	resourceName := "test-mem"
-	valueType := mesos.Value_Type(1.0)
-	resourceValue := 1.0
-	call := &master.Call_SetQuota{
+  role := "test-role"
+  resourceName := "test-mem"
+  valueType := mesos.Value_Type(1.0)
+  resourceValue := 1.0
+  call := &master.Call_SetQuota{
     QuotaRequest: &quota.QuotaRequest{
     Force: &force,
       Role:  &role,
