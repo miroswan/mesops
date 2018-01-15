@@ -72,20 +72,20 @@ For example:
 	valueType := mesos.Value_Type(1.0)
 	resourceValue := 1.0
 	call := &master.Call_SetQuota{
-		QuotaRequest: &quota.QuotaRequest{
-			Force: &force,
-			Role:  &role,
-			Guarantee: []*mesos.Resource{
-				&mesos.Resource{
-					Name: &resourceName,
-					Type: &valueType,
-					Scalar: &mesos.Value_Scalar{
-						Value: &resourceValue,
-					},
-				},
-			},
-		},
-	}
+    QuotaRequest: &quota.QuotaRequest{
+    Force: &force,
+      Role:  &role,
+      Guarantee: []*mesos.Resource{
+        &mesos.Resource{
+          Name: &resourceName,
+          Type: &valueType,
+          Scalar: &mesos.Value_Scalar{
+            Value: &resourceValue,
+          },
+        },
+      },
+    },
+  }
 
   // create a context with a timeout. The client timeout respects each attempt
   // whereas the context timeout will cancel regardless of the number of retries
