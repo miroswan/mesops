@@ -22,8 +22,9 @@ func TestGethealth(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if *data.GetHealth.Healthy != true {
-		t.Errorf("expected true: got %t", *data.GetHealth.Healthy)
+	result := data.GetHealth.GetHealthy()
+	if result != true {
+		t.Errorf("expected true: got %t", result)
 	}
 }
 
@@ -33,7 +34,8 @@ func TestGetVersion(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if *res.GetVersion.VersionInfo.Version != "1.4.1" {
-		t.Errorf("expected 1.4.1: got %s", *res.GetVersion.VersionInfo.Version)
+	result := res.GetGetVersion().GetVersionInfo().GetVersion()
+	if result != "1.4.1" {
+		t.Errorf("expected 1.4.1: got %s", result)
 	}
 }

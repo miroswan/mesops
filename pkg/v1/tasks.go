@@ -29,11 +29,13 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
+// GetTasks queries about all the tasks known to the master.
 func (m *Master) GetTasks(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_TASKS)
 	return
 }
 
+// GetTasks queries about all the tasks known to the agent.
 func (a *Agent) GetTasks(ctx context.Context) (response *agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_TASKS)
 	return

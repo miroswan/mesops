@@ -31,16 +31,19 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
+// GetMaintenanceStatus retrieves the cluster’s maintenance status.
 func (m *Master) GetMaintenanceStatus(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_MAINTENANCE_STATUS)
 	return
 }
 
+// GetMaintenanceSchedule retrieves the cluster’s maintenance schedule.
 func (m *Master) GetMaintenanceSchedule(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_MAINTENANCE_SCHEDULE)
 	return
 }
 
+// UpdateMaintenanceSchedule updates the cluster’s maintenance schedule.
 func (m *Master) UpdateMaintenanceSchedule(ctx context.Context, call *master.Call_UpdateMaintenanceSchedule) (err error) {
 	var callType master.Call_Type = master.Call_UPDATE_MAINTENANCE_SCHEDULE
 	var payload proto.Message = &master.Call{
@@ -57,6 +60,8 @@ func (m *Master) UpdateMaintenanceSchedule(ctx context.Context, call *master.Cal
 	return
 }
 
+// StartMaintenance starts the maintenance of the cluster, this would bring a
+// set of machines down.
 func (m *Master) StartMaintenance(ctx context.Context, call *master.Call_StartMaintenance) (err error) {
 	var callType master.Call_Type = master.Call_START_MAINTENANCE
 	var payload proto.Message = &master.Call{
@@ -73,6 +78,8 @@ func (m *Master) StartMaintenance(ctx context.Context, call *master.Call_StartMa
 	return
 }
 
+// StopMaintenace stops the maintenance of the cluster, this would bring a set of
+// machines back up.
 func (m *Master) StopMaintenance(ctx context.Context, call *master.Call_StopMaintenance) (err error) {
 	var callType master.Call_Type = master.Call_STOP_MAINTENANCE
 	var payload proto.Message = &master.Call{

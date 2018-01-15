@@ -31,6 +31,7 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
+// ReserveResource reserves resources dynamically on a specific agent.
 func (m *Master) ReserveResource(ctx context.Context, call *master.Call_ReserveResources) (err error) {
 	var callType master.Call_Type = master.Call_RESERVE_RESOURCES
 	var payload proto.Message = &master.Call{Type: &callType, ReserveResources: call}
@@ -44,6 +45,7 @@ func (m *Master) ReserveResource(ctx context.Context, call *master.Call_ReserveR
 	return
 }
 
+// UnreserveResource unreserves resources dynamically on a specific agent.
 func (m *Master) UnreserveResource(ctx context.Context, call *master.Call_UnreserveResources) (err error) {
 	var callType master.Call_Type = master.Call_RESERVE_RESOURCES
 	var payload proto.Message = &master.Call{Type: &callType, UnreserveResources: call}

@@ -29,7 +29,6 @@ import (
 )
 
 // GetWeights retrieves the information about role weights
-// http://mesos.apache.org/documentation/latest/operator-http-api/#get_weights
 func (m *Master) GetWeights(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_WEIGHTS)
 	return

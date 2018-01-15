@@ -28,11 +28,7 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
-// GetAgents returns a pointer to a GetAgents.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_agents
+// GetAgents  retrieves information about all the agents known to the master.
 func (m *Master) GetAgents(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_AGENTS)
 	return

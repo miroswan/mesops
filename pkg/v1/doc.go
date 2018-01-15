@@ -63,46 +63,38 @@ For example:
   if err != nil {
     log.Fatal(err)
   }
-  fmt.Println("The master is healthy: %b", *gh.GetHealth.Healthy)
+  fmt.Println("The master is healthy: %b", gh.GetGetHealth().GetHealthy())
 
-  // Set Quota
-  quota := `
-  {
-    "set_quota": {
-      "quota_request": {
-        "force": true,
-        "guarantee": [
-          {
-            "name": "cpus",
-            "role": "*",
-            "scalar": {
-              "value": 1.0
-            },
-            "type": "SCALAR"
-          },
-          {
-            "name": "mem",
-            "role": "*",
-            "scalar": {
-              "value": 512.0
-            },
-            "type": "SCALAR"
-          }
-        ],
-        "role": "role1"
-      }
-    }
-  }
-  `
-  sq := &SetQuota{}
-  err := json.Unmarshal([]byte(quota), sq)
-  if err != nil {
-    log.Fatal(err)
-  }
+  // Build Call_SetQuota
+  force := false
+	role := "test-role"
+	resourceName := "test-mem"
+	valueType := mesos.Value_Type(1.0)
+	resourceValue := 1.0
+	call := &master.Call_SetQuota{
+		QuotaRequest: &quota.QuotaRequest{
+			Force: &force,
+			Role:  &role,
+			Guarantee: []*mesos.Resource{
+				&mesos.Resource{
+					Name: &resourceName,
+					Type: &valueType,
+					Scalar: &mesos.Value_Scalar{
+						Value: &resourceValue,
+					},
+				},
+			},
+		},
+	}
+
   // create a context with a timeout. The client timeout respects each attempt
   // whereas the context timeout will cancel regardless of the number of retries
   // configured. Think of it as a global timeout for the entire call.
   ctx, _ := context.WithTimeout(context.Background(), 2 * time.Second)
+	err := masterClient.SetQuota(s.Ctx(), call)
+	if err != nil {
+		t.Error(err)
+	}
 
   err = masterClient.SetQuota(ctx, sq)
   if err != nil {
@@ -111,23 +103,9 @@ For example:
   fmt.Println("Successfully set quota for role1")
 }
 
-The methods for each client return pointers to structs that represent the decoded
-JSON form of the response payload. See Master and Agent for more details on the
-methods and types available to you.
-
 For the most part, you should not have to worry about HTTP when using this
 client. However, if a request fails with a response code outside of the 200
 range, the calling method will return an HTTPError. This error holds the
-response code and message, including both in the error message. Furthermore,
-each non-array value within a payload and response type is a pointer to a value.
-This allows the caller to check for nil values before accessing data within the
-unmarshalled payload and response structs.
-
-There are some cases where the Master and Agent share response structs of the
-same name, but differ in structure. In this case, the response structs can be
-found in github.com/miroswan/mesops/pkg/v1/master and
-github.com/miroswan/mesops/pkg/v1/agent.
-
-This package currently does not support calls for events or streaming responses.
+response code and message, including both in the error message.
 */
 package v1

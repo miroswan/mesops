@@ -7,7 +7,7 @@ exit_val=0
 
 # collect aggregate profile
 echo "mode: set" > aggregate.out
-for dir in $(find pkg -maxdepth 10 -type d ); do
+for dir in $(find pkg -maxdepth 2 -type d ); do
   if ls ${dir}/*.go &> /dev/null; then
     # If the exit value is non-zero, then store it. This wil allow us to test
     # everything before failing

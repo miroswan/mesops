@@ -29,11 +29,19 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
+// GetMetrics gives the snapshot of current metrics to the end user. If timeout
+// is set in the call, it will be used to determine the maximum amount of time
+// the API will take to respond. If the timeout is exceeded, some metrics may
+// not be included in the response.
 func (m *Master) GetMetrics(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_METRICS)
 	return
 }
 
+// GetMetrics gives the snapshot of current metrics to the end user. If timeout
+// is set in the call, it will be used to determine the maximum amount of time
+// the API will take to respond. If the timeout is exceeded, some metrics may
+// not be included in the response.
 func (a *Agent) GetMetrics(ctx context.Context) (response *agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_METRICS)
 	return

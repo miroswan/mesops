@@ -30,14 +30,12 @@ import (
 )
 
 // GetVersion retrieves the master’s version information.
-// http://mesos.apache.org/documentation/latest/operator-http-api/#get_version
 func (m *Master) GetVersion(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_VERSION)
 	return
 }
 
 // GetVersion retrieves the agent's version information.
-// http://mesos.apache.org/documentation/latest/operator-http-api/#get_version-1
 func (a *Agent) GetVersion(ctx context.Context) (response *agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_VERSION)
 	return

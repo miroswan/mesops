@@ -29,21 +29,13 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
-// GetExecutors returns a pointer to a master.GetExecutors.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_executors
+// GetExecutors queries about all the executors known to the master.
 func (m *Master) GetExecutors(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_EXECUTORS)
 	return
 }
 
-// GetExecutors returns a pointer to an agent.GetExecutors.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_executors-1
+// GetExecutors retrieves information about all the executors known to the agent.
 func (a *Agent) GetExecutors(ctx context.Context) (response *agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_EXECUTORS)
 	return

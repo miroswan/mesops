@@ -28,9 +28,8 @@ v1 is the current and only release for the Mesos Operator API at the time of
 this writing.
 
 mesops aims to keep things simple by minimally abstracting the Operator API
-with JSON content and Golang structs. Furthermore, there are no external
-depedencies in this project. Since the project has not yet reached stability,
-you may want to vendor this library using a package dependency manager such as
-glide or gb.
+with Protobuf content. Furthermore, proto is the only external dependency of
+this project. Since the project has not yet reached stability, you may want to
+vendor this library using a package dependency manager such as glide or gb.
 */
 package mesops

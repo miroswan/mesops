@@ -31,21 +31,17 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/agent"
 )
 
-// GetContainers returns a pointer to a GetContainers
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_containers
+// GetContainers retrieves information about containers running on this agent.
+// It contains ContainerStatus and ResourceStatistics along with some metadata
+// of the containers.
 func (a *Agent) GetContainers(ctx context.Context) (response *agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_CONTAINERS)
 	return
 }
 
-// LaunchNestedContainer launches a nested container on the configured Agent
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#launch_nested_container
+// LaunchNestedContainer launches a nested container. Any authorized entity,
+// including the executor itself, its tasks, or the operator can use this API to
+// launch a nested container.
 func (a *Agent) LaunchNestedContainer(ctx context.Context, call *agent.Call_LaunchNestedContainer) (err error) {
 	var callType agent.Call_Type = agent.Call_LAUNCH_NESTED_CONTAINER
 	var payload proto.Message = &agent.Call{Type: &callType, LaunchNestedContainer: call}
@@ -62,16 +58,12 @@ func (a *Agent) LaunchNestedContainer(ctx context.Context, call *agent.Call_Laun
 // WaitNestedContainer waits for a nested container to terminate or exit. Any
 // authorized entity, including the executor itself, its tasks, or the operator
 // can use this API to wait on a nested container.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#wait_nested_container
-func (a *Agent) WaitNestedContainer(ctx context.Context, call agent.Call_WaitNestedContainer) (
+func (a *Agent) WaitNestedContainer(ctx context.Context, call *agent.Call_WaitNestedContainer) (
 	response *agent.Response, err error,
 ) {
 	// Build message
 	var callType agent.Call_Type = agent.Call_WAIT_NESTED_CONTAINER
-	var payload proto.Message = &agent.Call{Type: &callType, WaitNestedContainer: &call}
+	var payload proto.Message = &agent.Call{Type: &callType, WaitNestedContainer: call}
 	var b []byte
 	// Encode to protobuf
 	b, err = proto.Marshal(payload)
@@ -88,13 +80,9 @@ func (a *Agent) WaitNestedContainer(ctx context.Context, call agent.Call_WaitNes
 // KillNestedContainer initiates the destruction of a nested container. Any
 // authorized entity, including the executor itself, its tasks, or the operator
 // can use this API to kill a nested container.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#kill_nested_container
-func (a *Agent) KillNestedContainer(ctx context.Context, call agent.Call_KillNestedContainer) (err error) {
+func (a *Agent) KillNestedContainer(ctx context.Context, call *agent.Call_KillNestedContainer) (err error) {
 	var callType agent.Call_Type = agent.Call_KILL_NESTED_CONTAINER
-	var payload proto.Message = &agent.Call{Type: &callType, KillNestedContainer: &call}
+	var payload proto.Message = &agent.Call{Type: &callType, KillNestedContainer: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {

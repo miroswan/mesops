@@ -33,9 +33,9 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
-// ListFiles returns a pointer to a ListFiles. You must pass a valid virtual
-// file path. A mapping of the virtual file paths to actual paths can be found
-// at the files/debug endpoint
+// ListFiles retrieves the file listing for a directory in master. You must
+// pass a valid virtual file path. A mapping of the virtual file paths to actual
+// paths can be found at the files/debug endpoint
 //
 // References:
 //
@@ -57,8 +57,9 @@ func (m *Master) ListFiles(ctx context.Context, call *master.Call_ListFiles) (re
 	return
 }
 
-// ListFiles retrieves the file listing for a directory in master. You must pass
-// a valid virtual file path.
+// ListFiles retrieves the file listing for a directory in agent. You must
+// pass a valid virtual file path. A mapping of the virtual file paths to actual
+// paths can be found at the files/debug endpoint
 //
 // References:
 //
@@ -80,15 +81,10 @@ func (a *Agent) ListFiles(ctx context.Context, call *agent.Call_ListFiles) (resp
 	return
 }
 
-// ReadFile reads data from a file on the master. This call takes the path of the
-// file to be read, the offset to start reading, and the maximum number of bytes
-// to read. The length member of the ReadFile is optional. The path must be a
-// valid virtual file path.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#read_file
-// 	* http://mesos.apache.org/documentation/latest/endpoints/files/debug
+// ReadFile retrieves the file listing for a directory in agent. This call takes
+// the path of the file to be read, the offset to start reading, and the maximum
+// number of bytes to read. The length member of the ReadFile is optional. The
+// path must be a valid virtual file path.
 func (m *Master) ReadFile(ctx context.Context, call *master.Call_ReadFile) (response *master.Response, err error) {
 	var callType master.Call_Type = master.Call_READ_FILE
 	var payload proto.Message = &master.Call{Type: &callType, ReadFile: call}
@@ -105,15 +101,10 @@ func (m *Master) ReadFile(ctx context.Context, call *master.Call_ReadFile) (resp
 	return
 }
 
-// ReadFile reads data from a file on the master. This call takes the path of the
-// file to be read, the offset to start reading, and the maximum number of bytes
-// to read. The length member of the ReadFile is optional. The path must be a
-// valid virtual file path.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#read_file
-// 	* http://mesos.apache.org/documentation/latest/endpoints/files/debug
+// ReadFile retrieves the file listing for a directory in agent. This call takes
+// the path of the file to be read, the offset to start reading, and the maximum
+// number of bytes to read. The length member of the ReadFile is optional. The
+// path must be a valid virtual file path.
 func (a *Agent) ReadFile(ctx context.Context, call *agent.Call_ReadFile) (response *agent.Response, err error) {
 	var callType agent.Call_Type = agent.Call_READ_FILE
 	var payload proto.Message = &agent.Call{Type: &callType, ReadFile: call}

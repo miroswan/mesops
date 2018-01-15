@@ -107,10 +107,6 @@ func (m *Master) sendSimpleCall(ctx context.Context, callType master.Call_Type) 
 }
 
 // GetMaster retrieves information about the master.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_master
 func (m *Master) GetMaster(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_MASTER)
 	return

@@ -29,21 +29,13 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
-// GetFrameorks returns a pointer to a master.GetFrameworks.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_frameworks
+// GetFrameorks retrieves information about all the frameworks known to the master.
 func (m *Master) GetFrameworks(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_FRAMEWORKS)
 	return
 }
 
-// GetFrameorks returns a pointer to an agent.GetFrameworks.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_frameworks-1
+// GetFrameorks retrieves information about all the frameworks known to the agent.
 func (a *Agent) GetFrameworks(ctx context.Context) (response *agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_FRAMEWORKS)
 	return

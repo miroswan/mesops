@@ -37,6 +37,11 @@ import (
 
 type EventStream chan *master.Event
 
+// Subscribe subscribes to events on the Mesos master. This method blocks, so
+// you. likely want to call it in a go routine. Process each *master.Event on
+// the EventStream by checking the type (you may call GetType() on the
+// *master.Event), then processing the data as needed. See the test/cmd
+// package for an example.
 func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
 	var callType master.Call_Type = master.Call_SUBSCRIBE
 	var callMsg proto.Message = &master.Call{Type: &callType}

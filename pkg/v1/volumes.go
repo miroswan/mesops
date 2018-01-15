@@ -35,10 +35,6 @@ import (
 // is forwarded asynchronously to the Mesos agent where the reserved resources
 // are located. That asynchronous message may not be delivered or creating the
 // volumes at the agent might fail.
-//
-// References:
-//
-//  * http://mesos.apache.org/documentation/latest/operator-http-api/#create_volumes
 func (m *Master) CreateVolumes(ctx context.Context, call *master.Call_CreateVolumes) (err error) {
 	var callType master.Call_Type = master.Call_CREATE_VOLUMES
 	var payload proto.Message = &master.Call{Type: &callType, CreateVolumes: call}
@@ -52,12 +48,8 @@ func (m *Master) CreateVolumes(ctx context.Context, call *master.Call_CreateVolu
 	return
 }
 
-// This call destroys persistent volumes. The request is forwarded
+// DestroyVolumes destroys persistent volumes. The request is forwarded
 // asynchronously to the Mesos agent where the reserved resources are located.
-//
-// References:
-//
-//  * http://mesos.apache.org/documentation/latest/operator-http-api/#destroy_volumes
 func (m *Master) DestroyVolumes(ctx context.Context, call *master.Call_DestroyVolumes) (err error) {
 	var callType master.Call_Type = master.Call_DESTROY_VOLUMES
 	var payload proto.Message = &master.Call{Type: &callType, DestroyVolumes: call}

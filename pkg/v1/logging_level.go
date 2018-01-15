@@ -32,30 +32,22 @@ import (
 	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
-// GetLoggingLevel returns a pointer to a GetLoggingLevel.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_logging_level
+// GetLoggingLevel retrieves the master’s logging level.
 func (m *Master) GetLoggingLevel(ctx context.Context) (response *master.Response, err error) {
 	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_LOGGING_LEVEL)
 	return
 }
 
-// GetLoggingLevel returns a pointer to a GetLoggingLevel.
-//
-// References:
-//
-// 	* http://mesos.apache.org/documentation/latest/operator-http-api/#get_logging_level-1
+// GetLoggingLevel retrieves the agent's logging level.
 func (a *Agent) GetLoggingLevel(ctx context.Context) (response *agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_LOGGING_LEVEL)
 	return
 }
 
-// SetLoggingLevel sets the logging level on the configured Master
-//
-// References:
-// * http://mesos.apache.org/documentation/latest/operator-http-api/#set_logging_level
+// SetLoggingLevel sets the logging verbosity level for a specified duration for
+// master. Mesos uses glog for logging. The library only uses verbose logging
+// which means nothing will be output unless the verbosity level is set
+// (by default it’s 0, libprocess uses levels 1, 2, and 3).
 func (m *Master) SetLoggingLevel(ctx context.Context, call *master.Call_SetLoggingLevel) (err error) {
 	var callType master.Call_Type = master.Call_SET_LOGGING_LEVEL
 	var payload proto.Message = &master.Call{Type: &callType, SetLoggingLevel: call}
@@ -70,10 +62,10 @@ func (m *Master) SetLoggingLevel(ctx context.Context, call *master.Call_SetLoggi
 	return
 }
 
-// SetLoggingLevel sets the logging level on the configured Agent
-//
-// References:
-// * http://mesos.apache.org/documentation/latest/operator-http-api/#set_logging_level-1
+// SetLoggingLevel sets the logging verbosity level for a specified duration for
+// agent. Mesos uses glog for logging. The library only uses verbose logging
+// which means nothing will be output unless the verbosity level is set
+// (by default it’s 0, libprocess uses levels 1, 2, and 3).
 func (a *Agent) SetLoggingLevel(ctx context.Context, call *agent.Call_SetLoggingLevel) (err error) {
 	var callType agent.Call_Type = agent.Call_SET_LOGGING_LEVEL
 	var payload proto.Message = &agent.Call{Type: &callType, SetLoggingLevel: call}
