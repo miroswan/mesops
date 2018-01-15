@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-go get github.com/golang/protobuf/proto
+go get -t ./... github.com/golang/protobuf/proto
 
 # Store exit value
 exit_val=0
