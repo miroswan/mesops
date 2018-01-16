@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.2.1](https://github.com/miroswan/mesops/tree/v0.2.1) (2018-01-16)
+[Full Changelog](https://github.com/miroswan/mesops/compare/v0.2.0...v0.2.1)
+
+**Merged pull requests:**
+
+- Remove unused private methods [\#1](https://github.com/miroswan/mesops/pull/1) ([miroswan](https://github.com/miroswan))
+
 ## [v0.2.0](https://github.com/miroswan/mesops/tree/v0.2.0) (2018-01-15)
 [Full Changelog](https://github.com/miroswan/mesops/compare/v0.1.0...v0.2.0)
 
