@@ -23,9 +23,7 @@
 package v1
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -217,106 +215,6 @@ func (b *clientBuilder) build() (client *client, err error) {
 	return
 }
 
-// doWithRetryAndLoad executes the HTTP POST request and retries up to the configured value of
-// MaxRetries. ctx is a context.Context. body is an io.Reader, likely implemented
-// as a []byte. interface is the struct to which we are Unmarshaling. In most
-// cases, you will
-func (c *client) doWithRetryAndLoad(ctx context.Context, body io.Reader, i interface{}) (res *http.Response, err error) {
-	var r []int = make([]int, *c.maxRetries+1) // Setup range for retries
-	var start time.Time                        // for generating the round trip time
-	var elapsed time.Duration
-	var backoff *binaryExponentialBackoff = &binaryExponentialBackoff{}
-	var req *http.Request
-	var errChan chan error = make(chan error)
-	go func() {
-		for count := range r {
-
-			// If it is not the first request, then wait
-			if count != 0 {
-				backoff.wait(count)
-			}
-			// If the round trip time is not set, then set the start time
-			if backoff.rtt == nil {
-				start = time.Now()
-			}
-			req, err = c.newRequest(body)
-			if err != nil {
-				errChan <- err
-				return
-			}
-			res, err = c.do(ctx, req, i)
-			// If the round trip time is not set, then calculate the elapsed time and
-			// set it to the round trip time. We will use this in later iterations to
-			// allow the backoff to wait for the the correct interval.
-			if backoff.rtt == nil {
-				elapsed = time.Since(start)
-				backoff.rtt = &elapsed
-			}
-			// If there was no error, then return. If there was an HTTPError then do not
-			// retry. Only retry on other errors.
-			if err == nil {
-				errChan <- err
-				return
-			} else {
-				var ok bool
-				var httpError HTTPError
-				if httpError, ok = err.(HTTPError); ok {
-					errChan <- httpError
-					return
-				}
-			}
-		}
-		errChan <- fmt.Errorf("exceeded %d retries", *c.maxRetries)
-		return
-	}()
-	select {
-	case <-ctx.Done():
-		err = ctx.Err()
-		return
-	case err = <-errChan:
-		return
-	}
-}
-
-// do executes the HTTP request and Unmarshals data if i is not nil.
-func (c *client) do(ctx context.Context, req *http.Request, i interface{}) (res *http.Response, err error) {
-	req = req.WithContext(ctx)
-	res, err = c.httpclient.Do(req)
-
-	if err != nil {
-		return
-	}
-
-	if res.StatusCode > 299 || res.StatusCode < 200 {
-		var msg []byte
-		msg, _ = ioutil.ReadAll(res.Body)
-		err = HTTPError{statusCode: res.StatusCode, msg: string(msg)}
-		return
-	}
-
-	if i != nil {
-		var j []byte
-		j, err = ioutil.ReadAll(res.Body)
-		if err != nil {
-			return
-		}
-		err = json.Unmarshal(j, i)
-	}
-	return
-}
-
-// newRequest returns a new *http.Request. Each request is a POST that requires
-// a payload that must contain the type of request.
-func (c *client) newRequest(body io.Reader) (req *http.Request, err error) {
-	req, err = http.NewRequest(http.MethodPost, c.baseURL.String(), body)
-	if err != nil {
-		return
-	}
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", *c.userAgent)
-	return
-}
-
 func (c *client) doProtoWrapper(ctx context.Context, body io.Reader, pb proto.Message) (res *http.Response, err error) {
 	var r []int = make([]int, *c.maxRetries+1) // Setup range for retries
 	var start time.Time                        // for generating the round trip time
@@ -421,12 +319,4 @@ type binaryExponentialBackoff struct {
 func (b *binaryExponentialBackoff) wait(count int) {
 	var retryDuration time.Duration = time.Duration(math.Pow(2, float64(count)))
 	time.Sleep(*b.rtt * retryDuration)
-}
-
-func simpleRequestPayload(typeStr string) *bytes.Buffer {
-	return bytes.NewBuffer([]byte(fmt.Sprintf(`{"type": "%s"}`, typeStr)))
-}
-
-func requestPayload(j string) *bytes.Buffer {
-	return bytes.NewBuffer([]byte(j))
 }
