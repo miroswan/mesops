@@ -34,7 +34,7 @@ construct each corresponding struct.
 For example:
 
   var masterClient *v1.Master
-  var agentClient *v1.Agent
+  var mesos_v1_agentClient *v1.Agent
   var err error
 
   // You can customize the masterClient
@@ -69,17 +69,17 @@ For example:
   force := false
   role := "test-role"
   resourceName := "test-mem"
-  valueType := mesos.Value_Type(1.0)
+  valueType := mesos_v1.Value_Type(1.0)
   resourceValue := 1.0
-  call := &master.Call_SetQuota{
-    QuotaRequest: &quota.QuotaRequest{
+  call := &mesos_v1_master.Call_SetQuota{
+    QuotaRequest: &mesos_v1_quota.QuotaRequest{
     Force: &force,
       Role:  &role,
-      Guarantee: []*mesos.Resource{
-        &mesos.Resource{
+      Guarantee: []*mesos_v1.Resource{
+        &mesos_v1.Resource{
           Name: &resourceName,
           Type: &valueType,
-          Scalar: &mesos.Value_Scalar{
+          Scalar: &mesos_v1.Value_Scalar{
             Value: &resourceValue,
           },
         },

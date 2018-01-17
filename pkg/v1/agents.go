@@ -25,11 +25,11 @@ package v1
 import (
 	"context"
 
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
-// GetAgents  retrieves information about all the agents known to the master.
-func (m *Master) GetAgents(ctx context.Context) (response *master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_AGENTS)
+// GetAgents  retrieves information about all the mesos_v1_agents known to the mesos_v1_master.
+func (m *Master) GetAgents(ctx context.Context) (response *mesos_v1_master.Response, err error) {
+	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_AGENTS)
 	return
 }

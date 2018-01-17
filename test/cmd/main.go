@@ -6,8 +6,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/mesos/go-proto/mesos/v1/master"
+
 	"github.com/miroswan/mesops/pkg/v1"
-	"github.com/miroswan/mesops/pkg/v1/master"
 )
 
 func main() {
@@ -30,23 +31,23 @@ func main() {
 			break
 		case e := <-es:
 			switch e.GetType() {
-			case master.Event_SUBSCRIBED:
+			case mesos_v1_master.Event_SUBSCRIBED:
 				fmt.Println(e.GetSubscribed().GetGetState())
-			case master.Event_TASK_ADDED:
+			case mesos_v1_master.Event_TASK_ADDED:
 				fmt.Println(e.GetTaskAdded().GetTask())
-			case master.Event_TASK_UPDATED:
+			case mesos_v1_master.Event_TASK_UPDATED:
 				fmt.Println(e.GetTaskUpdated().GetState())
-			case master.Event_AGENT_ADDED:
+			case mesos_v1_master.Event_AGENT_ADDED:
 				fmt.Println(e.GetAgentAdded().GetAgent())
-			case master.Event_AGENT_REMOVED:
+			case mesos_v1_master.Event_AGENT_REMOVED:
 				fmt.Println(e.GetAgentRemoved().GetAgentId())
-			case master.Event_FRAMEWORK_ADDED:
+			case mesos_v1_master.Event_FRAMEWORK_ADDED:
 				fmt.Println(e.GetFrameworkAdded().GetFramework())
-			case master.Event_FRAMEWORK_UPDATED:
+			case mesos_v1_master.Event_FRAMEWORK_UPDATED:
 				fmt.Println(e.GetFrameworkUpdated().GetFramework())
-			case master.Event_FRAMEWORK_REMOVED:
+			case mesos_v1_master.Event_FRAMEWORK_REMOVED:
 				fmt.Println(e.GetFrameworkRemoved().GetFrameworkInfo())
-			case master.Event_UNKNOWN:
+			case mesos_v1_master.Event_UNKNOWN:
 				fmt.Println("Event unknown")
 			}
 		}

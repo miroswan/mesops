@@ -28,19 +28,19 @@ import (
 	"io"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 // GetQuota retrieves the cluster’s configured quotas.
-func (m *Master) GetQuota(ctx context.Context) (response *master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_QUOTA)
+func (m *Master) GetQuota(ctx context.Context) (response *mesos_v1_master.Response, err error) {
+	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_QUOTA)
 	return
 }
 
 // SetQuota sets the quota for resources to be used by a particular role.
-func (m *Master) SetQuota(ctx context.Context, call *master.Call_SetQuota) (err error) {
-	var callType master.Call_Type = master.Call_SET_QUOTA
-	var payload proto.Message = &master.Call{Type: &callType, SetQuota: call}
+func (m *Master) SetQuota(ctx context.Context, call *mesos_v1_master.Call_SetQuota) (err error) {
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_SET_QUOTA
+	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, SetQuota: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {
@@ -52,9 +52,9 @@ func (m *Master) SetQuota(ctx context.Context, call *master.Call_SetQuota) (err 
 }
 
 // RemoveQuota  removes the quota for a particular role.
-func (m *Master) RemoveQuota(ctx context.Context, call *master.Call_RemoveQuota) (err error) {
-	var callType master.Call_Type = master.Call_REMOVE_QUOTA
-	var payload proto.Message = &master.Call{Type: &callType, RemoveQuota: call}
+func (m *Master) RemoveQuota(ctx context.Context, call *mesos_v1_master.Call_RemoveQuota) (err error) {
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_REMOVE_QUOTA
+	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, RemoveQuota: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {

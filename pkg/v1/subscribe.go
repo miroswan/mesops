@@ -32,26 +32,26 @@ import (
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
-type EventStream chan *master.Event
+type EventStream chan *mesos_v1_master.Event
 
-// Subscribe subscribes to events on the Mesos master. This method blocks, so
-// you. likely want to call it in a go routine. Process each *master.Event on
+// Subscribe subscribes to events on the Mesos mesos_v1_master. This method blocks, so
+// you. likely want to call it in a go routine. Process each *mesos_v1_master.Event on
 // the EventStream by checking the type (you may call GetType() on the
-// *master.Event), then processing the data as needed. See the test/cmd
+// *mesos_v1_master.Event), then processing the data as needed. See the test/cmd
 // package for an example.
 func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
-	var callType master.Call_Type = master.Call_SUBSCRIBE
-	var callMsg proto.Message = &master.Call{Type: &callType}
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_SUBSCRIBE
+	var callMsg proto.Message = &mesos_v1_master.Call{Type: &callType}
 	var b []byte
 	b, err = proto.Marshal(callMsg)
 	if err != nil {
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	var event *master.Event = &master.Event{}
+	var event *mesos_v1_master.Event = &mesos_v1_master.Event{}
 	var httpResponse *http.Response
 	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
 	if err != nil {
@@ -92,7 +92,7 @@ func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
 				}
 				eventBytes = append(eventBytes, moreEvent...)
 			}
-			// Unmarshal data into a master.Event
+			// Unmarshal data into a mesos_v1_master.Event
 			err = proto.Unmarshal(eventBytes, event)
 			if err != nil {
 				return

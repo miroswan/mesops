@@ -25,18 +25,18 @@ package v1
 import (
 	"context"
 
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
-// GetFrameorks retrieves information about all the frameworks known to the master.
-func (m *Master) GetFrameworks(ctx context.Context) (response *master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_FRAMEWORKS)
+// GetFrameorks retrieves information about all the frameworks known to the mesos_v1_master.
+func (m *Master) GetFrameworks(ctx context.Context) (response *mesos_v1_master.Response, err error) {
+	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_FRAMEWORKS)
 	return
 }
 
-// GetFrameorks retrieves information about all the frameworks known to the agent.
-func (a *Agent) GetFrameworks(ctx context.Context) (response *agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_FRAMEWORKS)
+// GetFrameorks retrieves information about all the frameworks known to the mesos_v1_agent.
+func (a *Agent) GetFrameworks(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
+	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_FRAMEWORKS)
 	return
 }

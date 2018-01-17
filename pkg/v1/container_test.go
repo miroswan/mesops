@@ -4,31 +4,31 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
 )
 
 func TestAgentGetContainers(t *testing.T) {
 	s := NewTestProtobufServer(AgentClient)
 
 	// Setup Response
-	responseType := agent.Response_GET_CONTAINERS
+	responseType := mesos_v1_agent.Response_GET_CONTAINERS
 	executorName := "fake-executor"
 	frameworkID := "fake-framework-id"
 	executorID := "fake-executor-id"
 	containerID := "fake-container-id"
-	response := agent.Response{
+	response := mesos_v1_agent.Response{
 		Type: &responseType,
-		GetContainers: &agent.Response_GetContainers{
-			Containers: []*agent.Response_GetContainers_Container{
-				&agent.Response_GetContainers_Container{
-					FrameworkId: &mesos.FrameworkID{
+		GetContainers: &mesos_v1_agent.Response_GetContainers{
+			Containers: []*mesos_v1_agent.Response_GetContainers_Container{
+				&mesos_v1_agent.Response_GetContainers_Container{
+					FrameworkId: &mesos_v1.FrameworkID{
 						Value: &frameworkID,
 					},
-					ExecutorId: &mesos.ExecutorID{
+					ExecutorId: &mesos_v1.ExecutorID{
 						Value: &executorID,
 					},
-					ContainerId: &mesos.ContainerID{
+					ContainerId: &mesos_v1.ContainerID{
 						Value: &containerID,
 					},
 					ExecutorName: &executorName,

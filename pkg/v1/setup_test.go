@@ -8,8 +8,8 @@ import (
 	"net/http/httptest"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 type ClientType int
@@ -24,7 +24,7 @@ type TestProtobufServer struct {
 	httpClient      *http.Client
 	httpServer      *httptest.Server
 	master          *Master
-	agent           *Agent
+	mesos_v1_agent  *Agent
 	clientType      ClientType
 	input           []byte
 	output          []byte
@@ -38,7 +38,7 @@ func NewTestProtobufServer(clientType ClientType) *TestProtobufServer {
 	server := httptest.NewServer(mux)
 	httpClient := server.Client()
 	master, _ := NewMasterBuilder(server.URL).SetHTTPClient(httpClient).Build()
-	agent, _ := NewAgentBuilder(server.URL).SetHTTPClient(httpClient).Build()
+	mesos_v1_agent, _ := NewAgentBuilder(server.URL).SetHTTPClient(httpClient).Build()
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	return &TestProtobufServer{
 		mux:             mux,
@@ -46,7 +46,7 @@ func NewTestProtobufServer(clientType ClientType) *TestProtobufServer {
 		httpServer:      server,
 		httpClient:      httpClient,
 		master:          master,
-		agent:           agent,
+		mesos_v1_agent:  mesos_v1_agent,
 		ctx:             ctx,
 		cancelFunc:      cancelFunc,
 		closeServerFunc: server.Close,
@@ -61,7 +61,7 @@ func (t *TestProtobufServer) Teardown() {
 }
 
 func (t *TestProtobufServer) Master() *Master      { return t.master }
-func (t *TestProtobufServer) Agent() *Agent        { return t.agent }
+func (t *TestProtobufServer) Agent() *Agent        { return t.mesos_v1_agent }
 func (t *TestProtobufServer) Ctx() context.Context { return t.ctx }
 
 func (t *TestProtobufServer) SetOutput(b []byte) *TestProtobufServer {
@@ -95,9 +95,9 @@ func (t *TestProtobufServer) Handle() {
 				// Umarshall the request into a Response
 				switch t.clientType {
 				case MasterClient:
-					err = proto.Unmarshal(b, &master.Call{})
+					err = proto.Unmarshal(b, &mesos_v1_master.Call{})
 				case AgentClient:
-					err = proto.Unmarshal(b, &agent.Call{})
+					err = proto.Unmarshal(b, &mesos_v1_agent.Call{})
 				}
 				// If there is an error, send error response
 				if err != nil {

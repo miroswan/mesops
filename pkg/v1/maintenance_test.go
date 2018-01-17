@@ -4,40 +4,39 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-
-	"github.com/miroswan/mesops/pkg/v1/allocator"
-	"github.com/miroswan/mesops/pkg/v1/maintenance"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/allocator"
+	"github.com/mesos/go-proto/mesos/v1/maintenance"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestGetMaintenanceStatus(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_MAINTENANCE_STATUS
+	responseType := mesos_v1_master.Response_GET_MAINTENANCE_STATUS
 	hostname := "test-node"
 	ip := "127.0.0.1"
-	inverseOfferStatus := allocator.InverseOfferStatus_Status(1)
+	inverseOfferStatus := mesos_v1_allocator.InverseOfferStatus_Status(1)
 	frameworkID := "test-framework"
 	nanoseconds := int64(2000000)
-	response := master.Response{
+	response := mesos_v1_master.Response{
 		Type: &responseType,
-		GetMaintenanceStatus: &master.Response_GetMaintenanceStatus{
-			Status: &maintenance.ClusterStatus{
-				DrainingMachines: []*maintenance.ClusterStatus_DrainingMachine{
-					&maintenance.ClusterStatus_DrainingMachine{
-						Id: &mesos.MachineID{
+		GetMaintenanceStatus: &mesos_v1_master.Response_GetMaintenanceStatus{
+			Status: &mesos_v1_maintenance.ClusterStatus{
+				DrainingMachines: []*mesos_v1_maintenance.ClusterStatus_DrainingMachine{
+					&mesos_v1_maintenance.ClusterStatus_DrainingMachine{
+						Id: &mesos_v1.MachineID{
 							Hostname: &hostname,
 							Ip:       &ip,
 						},
-						Statuses: []*allocator.InverseOfferStatus{
-							&allocator.InverseOfferStatus{
+						Statuses: []*mesos_v1_allocator.InverseOfferStatus{
+							&mesos_v1_allocator.InverseOfferStatus{
 								Status: &inverseOfferStatus,
-								FrameworkId: &mesos.FrameworkID{
+								FrameworkId: &mesos_v1.FrameworkID{
 									Value: &frameworkID,
 								},
-								Timestamp: &mesos.TimeInfo{
+								Timestamp: &mesos_v1.TimeInfo{
 									Nanoseconds: &nanoseconds,
 								},
 							},
@@ -96,24 +95,24 @@ func TestGetMaintenanceSchedule(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_MAINTENANCE_SCHEDULE
+	responseType := mesos_v1_master.Response_GET_MAINTENANCE_SCHEDULE
 	hostname := "test-node"
 	ip := "127.0.0.1"
 	nanoseconds := int64(2000000)
-	response := master.Response{
+	response := mesos_v1_master.Response{
 		Type: &responseType,
-		GetMaintenanceSchedule: &master.Response_GetMaintenanceSchedule{
-			Schedule: &maintenance.Schedule{
-				Windows: []*maintenance.Window{
-					&maintenance.Window{
-						MachineIds: []*mesos.MachineID{
-							&mesos.MachineID{
+		GetMaintenanceSchedule: &mesos_v1_master.Response_GetMaintenanceSchedule{
+			Schedule: &mesos_v1_maintenance.Schedule{
+				Windows: []*mesos_v1_maintenance.Window{
+					&mesos_v1_maintenance.Window{
+						MachineIds: []*mesos_v1.MachineID{
+							&mesos_v1.MachineID{
 								Hostname: &hostname,
 								Ip:       &ip,
 							},
 						},
-						Unavailability: &mesos.Unavailability{
-							Start: &mesos.TimeInfo{
+						Unavailability: &mesos_v1.Unavailability{
+							Start: &mesos_v1.TimeInfo{
 								Nanoseconds: &nanoseconds,
 							},
 						},
@@ -163,18 +162,18 @@ func TestUpdateMaintenanceSchedule(t *testing.T) {
 	ip := "127.0.0.1"
 	nanoseconds := int64(2000000)
 
-	call := &master.Call_UpdateMaintenanceSchedule{
-		Schedule: &maintenance.Schedule{
-			Windows: []*maintenance.Window{
-				&maintenance.Window{
-					MachineIds: []*mesos.MachineID{
-						&mesos.MachineID{
+	call := &mesos_v1_master.Call_UpdateMaintenanceSchedule{
+		Schedule: &mesos_v1_maintenance.Schedule{
+			Windows: []*mesos_v1_maintenance.Window{
+				&mesos_v1_maintenance.Window{
+					MachineIds: []*mesos_v1.MachineID{
+						&mesos_v1.MachineID{
 							Hostname: &hostname,
 							Ip:       &ip,
 						},
 					},
-					Unavailability: &mesos.Unavailability{
-						Start: &mesos.TimeInfo{
+					Unavailability: &mesos_v1.Unavailability{
+						Start: &mesos_v1.TimeInfo{
 							Nanoseconds: &nanoseconds,
 						},
 					},
@@ -197,9 +196,9 @@ func TestStartMaintenace(t *testing.T) {
 
 	hostname := "test-node"
 	ip := "127.0.0.1"
-	call := &master.Call_StartMaintenance{
-		Machines: []*mesos.MachineID{
-			&mesos.MachineID{
+	call := &mesos_v1_master.Call_StartMaintenance{
+		Machines: []*mesos_v1.MachineID{
+			&mesos_v1.MachineID{
 				Hostname: &hostname,
 				Ip:       &ip,
 			},
@@ -220,9 +219,9 @@ func TestStopMaintenace(t *testing.T) {
 
 	hostname := "test-node"
 	ip := "127.0.0.1"
-	call := &master.Call_StopMaintenance{
-		Machines: []*mesos.MachineID{
-			&mesos.MachineID{
+	call := &mesos_v1_master.Call_StopMaintenance{
+		Machines: []*mesos_v1.MachineID{
+			&mesos_v1.MachineID{
 				Hostname: &hostname,
 				Ip:       &ip,
 			},

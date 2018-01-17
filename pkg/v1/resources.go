@@ -28,13 +28,13 @@ import (
 	"io"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
-// ReserveResource reserves resources dynamically on a specific agent.
-func (m *Master) ReserveResource(ctx context.Context, call *master.Call_ReserveResources) (err error) {
-	var callType master.Call_Type = master.Call_RESERVE_RESOURCES
-	var payload proto.Message = &master.Call{Type: &callType, ReserveResources: call}
+// ReserveResource reserves resources dynamically on a specific mesos_v1_agent.
+func (m *Master) ReserveResource(ctx context.Context, call *mesos_v1_master.Call_ReserveResources) (err error) {
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_RESERVE_RESOURCES
+	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, ReserveResources: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {
@@ -45,10 +45,10 @@ func (m *Master) ReserveResource(ctx context.Context, call *master.Call_ReserveR
 	return
 }
 
-// UnreserveResource unreserves resources dynamically on a specific agent.
-func (m *Master) UnreserveResource(ctx context.Context, call *master.Call_UnreserveResources) (err error) {
-	var callType master.Call_Type = master.Call_RESERVE_RESOURCES
-	var payload proto.Message = &master.Call{Type: &callType, UnreserveResources: call}
+// UnreserveResource unreserves resources dynamically on a specific mesos_v1_agent.
+func (m *Master) UnreserveResource(ctx context.Context, call *mesos_v1_master.Call_UnreserveResources) (err error) {
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_RESERVE_RESOURCES
+	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, UnreserveResources: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {

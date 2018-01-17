@@ -25,11 +25,11 @@ package v1
 import (
 	"context"
 
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 // GetWeights retrieves the information about role weights
-func (m *Master) GetWeights(ctx context.Context) (response *master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_WEIGHTS)
+func (m *Master) GetWeights(ctx context.Context) (response *mesos_v1_master.Response, err error) {
+	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_WEIGHTS)
 	return
 }

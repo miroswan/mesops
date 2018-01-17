@@ -29,7 +29,7 @@ import (
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/agent"
 )
 
 // Agent is a struct that handles most interactions with the
@@ -47,7 +47,7 @@ type AgentBuilder struct {
 }
 
 // NewAgentBuilder returns a pointer to an AgentBuilder. The serverURL is the
-// base URL of the agent, including the SCHEMA://FQDN_OR_IP:PORT
+// base URL of the mesos_v1_agent, including the SCHEMA://FQDN_OR_IP:PORT
 func NewAgentBuilder(serverURL string) *AgentBuilder {
 	return &AgentBuilder{clientBuilder: newClientBuilder(serverURL)}
 }
@@ -88,20 +88,20 @@ func (b *AgentBuilder) Build() (a *Agent, err error) {
 	return
 }
 
-// sendSimpleCall configures a simple agent.Call, marshalls it into binary format,
-// and sends it over HTTP to the configured agent. These calls don't need
-// additional configuration other than the agent.Call_Type
-func (a *Agent) sendSimpleCall(ctx context.Context, callType agent.Call_Type) (
-	response *agent.Response, httpResponse *http.Response, err error,
+// sendSimpleCall configures a simple mesos_v1_agent.Call, marshalls it into binary format,
+// and sends it over HTTP to the configured mesos_v1_agent. These calls don't need
+// additional configuration other than the mesos_v1_agent.Call_Type
+func (a *Agent) sendSimpleCall(ctx context.Context, callType mesos_v1_agent.Call_Type) (
+	response *mesos_v1_agent.Response, httpResponse *http.Response, err error,
 ) {
-	var callMsg proto.Message = &agent.Call{Type: &callType}
+	var callMsg proto.Message = &mesos_v1_agent.Call{Type: &callType}
 	var b []byte
 	b, err = proto.Marshal(callMsg)
 	if err != nil {
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	response = &agent.Response{}
+	response = &mesos_v1_agent.Response{}
 	httpResponse, err = a.client.doProtoWrapper(ctx, buf, response)
 	return
 }
