@@ -35,7 +35,7 @@ func (m *Master) GetHealth(ctx context.Context) (response *mesos_v1_master.Respo
 	return
 }
 
-// GetHealth retrieves the health status of mesos_v1_agent.
+// GetHealth retrieves the health status of agent.
 func (a *Agent) GetHealth(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_HEALTH)
 	return

@@ -32,9 +32,9 @@ import (
 )
 
 // CreateVolumes creates persistent volumes on reserved resources. The request
-// is forwarded asynchronously to the Mesos mesos_v1_agent where the reserved resources
+// is forwarded asynchronously to the Mesos agent where the reserved resources
 // are located. That asynchronous message may not be delivered or creating the
-// volumes at the mesos_v1_agent might fail.
+// volumes at the agent might fail.
 func (m *Master) CreateVolumes(ctx context.Context, call *mesos_v1_master.Call_CreateVolumes) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_CREATE_VOLUMES
 	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, CreateVolumes: call}
@@ -49,7 +49,7 @@ func (m *Master) CreateVolumes(ctx context.Context, call *mesos_v1_master.Call_C
 }
 
 // DestroyVolumes destroys persistent volumes. The request is forwarded
-// asynchronously to the Mesos mesos_v1_agent where the reserved resources are located.
+// asynchronously to the Mesos agent where the reserved resources are located.
 func (m *Master) DestroyVolumes(ctx context.Context, call *mesos_v1_master.Call_DestroyVolumes) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_DESTROY_VOLUMES
 	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, DestroyVolumes: call}

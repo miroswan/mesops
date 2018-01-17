@@ -89,7 +89,7 @@ func (b *AgentBuilder) Build() (a *Agent, err error) {
 }
 
 // sendSimpleCall configures a simple mesos_v1_agent.Call, marshalls it into binary format,
-// and sends it over HTTP to the configured mesos_v1_agent. These calls don't need
+// and sends it over HTTP to the configured agent. These calls don't need
 // additional configuration other than the mesos_v1_agent.Call_Type
 func (a *Agent) sendSimpleCall(ctx context.Context, callType mesos_v1_agent.Call_Type) (
 	response *mesos_v1_agent.Response, httpResponse *http.Response, err error,

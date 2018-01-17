@@ -35,7 +35,7 @@ func (m *Master) GetTasks(ctx context.Context) (response *mesos_v1_master.Respon
 	return
 }
 
-// GetTasks queries about all the tasks known to the mesos_v1_agent.
+// GetTasks queries about all the tasks known to the agent.
 func (a *Agent) GetTasks(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_TASKS)
 	return

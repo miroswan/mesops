@@ -56,7 +56,7 @@ func (m *Master) ListFiles(ctx context.Context, call *mesos_v1_master.Call_ListF
 	return
 }
 
-// ListFiles retrieves the file listing for a directory in mesos_v1_agent. You must
+// ListFiles retrieves the file listing for a directory in agent. You must
 // pass a valid virtual file path. A mapping of the virtual file paths to actual
 // paths can be found at the files/debug endpoint
 //

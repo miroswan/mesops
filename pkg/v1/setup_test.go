@@ -24,7 +24,7 @@ type TestProtobufServer struct {
 	httpClient      *http.Client
 	httpServer      *httptest.Server
 	master          *Master
-	mesos_v1_agent  *Agent
+	agent           *Agent
 	clientType      ClientType
 	input           []byte
 	output          []byte
@@ -38,7 +38,7 @@ func NewTestProtobufServer(clientType ClientType) *TestProtobufServer {
 	server := httptest.NewServer(mux)
 	httpClient := server.Client()
 	master, _ := NewMasterBuilder(server.URL).SetHTTPClient(httpClient).Build()
-	mesos_v1_agent, _ := NewAgentBuilder(server.URL).SetHTTPClient(httpClient).Build()
+	agent, _ := NewAgentBuilder(server.URL).SetHTTPClient(httpClient).Build()
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	return &TestProtobufServer{
 		mux:             mux,
@@ -46,7 +46,7 @@ func NewTestProtobufServer(clientType ClientType) *TestProtobufServer {
 		httpServer:      server,
 		httpClient:      httpClient,
 		master:          master,
-		mesos_v1_agent:  mesos_v1_agent,
+		agent:           agent,
 		ctx:             ctx,
 		cancelFunc:      cancelFunc,
 		closeServerFunc: server.Close,
@@ -61,7 +61,7 @@ func (t *TestProtobufServer) Teardown() {
 }
 
 func (t *TestProtobufServer) Master() *Master      { return t.master }
-func (t *TestProtobufServer) Agent() *Agent        { return t.mesos_v1_agent }
+func (t *TestProtobufServer) Agent() *Agent        { return t.agent }
 func (t *TestProtobufServer) Ctx() context.Context { return t.ctx }
 
 func (t *TestProtobufServer) SetOutput(b []byte) *TestProtobufServer {
