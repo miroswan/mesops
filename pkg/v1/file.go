@@ -35,11 +35,6 @@ import (
 // ListFiles retrieves the file listing for a directory in mesos_v1_master. You must
 // pass a valid virtual file path. A mapping of the virtual file paths to actual
 // paths can be found at the files/debug endpoint
-//
-// References:
-//
-// 	* http://mesos_v1.apache.org/documentation/latest/operator-http-api/#list_files
-// 	* http://mesos_v1.apache.org/documentation/latest/endpoints/files/debug
 func (m *Master) ListFiles(ctx context.Context, call *mesos_v1_master.Call_ListFiles) (response *mesos_v1_master.Response, err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_LIST_FILES
 	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, ListFiles: call}
@@ -59,11 +54,6 @@ func (m *Master) ListFiles(ctx context.Context, call *mesos_v1_master.Call_ListF
 // ListFiles retrieves the file listing for a directory in agent. You must
 // pass a valid virtual file path. A mapping of the virtual file paths to actual
 // paths can be found at the files/debug endpoint
-//
-// References:
-//
-// 	* http://mesos_v1.apache.org/documentation/latest/operator-http-api/#list_files-1
-// 	* http://mesos_v1.apache.org/documentation/latest/endpoints/files/debug
 func (a *Agent) ListFiles(ctx context.Context, call *mesos_v1_agent.Call_ListFiles) (response *mesos_v1_agent.Response, err error) {
 	var callType mesos_v1_agent.Call_Type = mesos_v1_agent.Call_LIST_FILES
 	var payload proto.Message = &mesos_v1_agent.Call{Type: &callType, ListFiles: call}
