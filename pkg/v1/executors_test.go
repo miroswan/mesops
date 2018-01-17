@@ -4,29 +4,29 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterGetExecutors(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	callType := master.Response_GET_EXECUTORS
+	callType := mesos_v1_master.Response_GET_EXECUTORS
 	slaveID := "test-id"
 	executorID := "test-id"
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type: &callType,
-		GetExecutors: &master.Response_GetExecutors{
-			Executors: []*master.Response_GetExecutors_Executor{
-				&master.Response_GetExecutors_Executor{
-					ExecutorInfo: &mesos.ExecutorInfo{
-						ExecutorId: &mesos.ExecutorID{
+		GetExecutors: &mesos_v1_master.Response_GetExecutors{
+			Executors: []*mesos_v1_master.Response_GetExecutors_Executor{
+				&mesos_v1_master.Response_GetExecutors_Executor{
+					ExecutorInfo: &mesos_v1.ExecutorInfo{
+						ExecutorId: &mesos_v1.ExecutorID{
 							Value: &executorID,
 						},
 					},
-					SlaveId: &mesos.SlaveID{
+					AgentId: &mesos_v1.AgentID{
 						Value: &slaveID,
 					},
 				},
@@ -47,7 +47,7 @@ func TestMasterGetExecutors(t *testing.T) {
 	}
 
 	// Set
-	slaveIDResponse := data.GetGetExecutors().GetExecutors()[0].GetSlaveId().GetValue()
+	slaveIDResponse := data.GetGetExecutors().GetExecutors()[0].GetAgentId().GetValue()
 
 	// Assert
 	if slaveID != slaveIDResponse {
@@ -59,16 +59,16 @@ func TestAgentGetExecutors(t *testing.T) {
 	s := NewTestProtobufServer(AgentClient)
 	defer s.Teardown()
 
-	callType := agent.Response_GET_EXECUTORS
+	callType := mesos_v1_agent.Response_GET_EXECUTORS
 	slaveID := "test-id"
 	executorID := "test-id"
-	response := &agent.Response{
+	response := &mesos_v1_agent.Response{
 		Type: &callType,
-		GetExecutors: &agent.Response_GetExecutors{
-			Executors: []*agent.Response_GetExecutors_Executor{
-				&agent.Response_GetExecutors_Executor{
-					ExecutorInfo: &mesos.ExecutorInfo{
-						ExecutorId: &mesos.ExecutorID{
+		GetExecutors: &mesos_v1_agent.Response_GetExecutors{
+			Executors: []*mesos_v1_agent.Response_GetExecutors_Executor{
+				&mesos_v1_agent.Response_GetExecutors_Executor{
+					ExecutorInfo: &mesos_v1.ExecutorInfo{
+						ExecutorId: &mesos_v1.ExecutorID{
 							Value: &executorID,
 						},
 					},

@@ -29,7 +29,7 @@ import (
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 // MasterBuilder is a builder that takes some manditory parameters and
@@ -41,7 +41,7 @@ type MasterBuilder struct {
 }
 
 // NewMasterBuilder returns a pointer to an MasterBuilder. The serverURL is the
-// base URL of the agent, including the SCHEMA://FQDN_OR_IP:PORT
+// base URL of the mesos_v1_agent, including the SCHEMA://FQDN_OR_IP:PORT
 func NewMasterBuilder(serverURL string) *MasterBuilder {
 	return &MasterBuilder{clientBuilder: newClientBuilder(serverURL)}
 }
@@ -88,26 +88,26 @@ type Master struct {
 	*client
 }
 
-// sendSimpleCall configures a simple master.Call, marshalls it into binary format,
-// and sends it over HTTP to the configured master. These calls don't need
-// additional configuration other than the master.Call_Type
-func (m *Master) sendSimpleCall(ctx context.Context, callType master.Call_Type) (
-	response *master.Response, httpResponse *http.Response, err error,
+// sendSimpleCall configures a simple mesos_v1_master.Call, marshalls it into binary format,
+// and sends it over HTTP to the configured mesos_v1_master. These calls don't need
+// additional configuration other than the mesos_v1_master.Call_Type
+func (m *Master) sendSimpleCall(ctx context.Context, callType mesos_v1_master.Call_Type) (
+	response *mesos_v1_master.Response, httpResponse *http.Response, err error,
 ) {
-	var callMsg proto.Message = &master.Call{Type: &callType}
+	var callMsg proto.Message = &mesos_v1_master.Call{Type: &callType}
 	var b []byte
 	b, err = proto.Marshal(callMsg)
 	if err != nil {
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	response = &master.Response{}
+	response = &mesos_v1_master.Response{}
 	httpResponse, err = m.client.doProtoWrapper(ctx, buf, response)
 	return
 }
 
-// GetMaster retrieves information about the master.
-func (m *Master) GetMaster(ctx context.Context) (response *master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_MASTER)
+// GetMaster retrieves information about the mesos_v1_master.
+func (m *Master) GetMaster(ctx context.Context) (response *mesos_v1_master.Response, err error) {
+	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MASTER)
 	return
 }

@@ -28,16 +28,16 @@ import (
 	"io"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 // CreateVolumes creates persistent volumes on reserved resources. The request
-// is forwarded asynchronously to the Mesos agent where the reserved resources
+// is forwarded asynchronously to the Mesos mesos_v1_agent where the reserved resources
 // are located. That asynchronous message may not be delivered or creating the
-// volumes at the agent might fail.
-func (m *Master) CreateVolumes(ctx context.Context, call *master.Call_CreateVolumes) (err error) {
-	var callType master.Call_Type = master.Call_CREATE_VOLUMES
-	var payload proto.Message = &master.Call{Type: &callType, CreateVolumes: call}
+// volumes at the mesos_v1_agent might fail.
+func (m *Master) CreateVolumes(ctx context.Context, call *mesos_v1_master.Call_CreateVolumes) (err error) {
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_CREATE_VOLUMES
+	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, CreateVolumes: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {
@@ -49,10 +49,10 @@ func (m *Master) CreateVolumes(ctx context.Context, call *master.Call_CreateVolu
 }
 
 // DestroyVolumes destroys persistent volumes. The request is forwarded
-// asynchronously to the Mesos agent where the reserved resources are located.
-func (m *Master) DestroyVolumes(ctx context.Context, call *master.Call_DestroyVolumes) (err error) {
-	var callType master.Call_Type = master.Call_DESTROY_VOLUMES
-	var payload proto.Message = &master.Call{Type: &callType, DestroyVolumes: call}
+// asynchronously to the Mesos mesos_v1_agent where the reserved resources are located.
+func (m *Master) DestroyVolumes(ctx context.Context, call *mesos_v1_master.Call_DestroyVolumes) (err error) {
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_DESTROY_VOLUMES
+	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, DestroyVolumes: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {

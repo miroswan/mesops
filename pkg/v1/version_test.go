@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterGetVersion(t *testing.T) {
@@ -15,15 +15,15 @@ func TestMasterGetVersion(t *testing.T) {
 	defer s.Teardown()
 
 	// Create Mock Response
-	masterCallType := master.Response_GET_VERSION
+	masterCallType := mesos_v1_master.Response_GET_VERSION
 	version := "1.0.0"
 	buildDate := "2016-06-24 23:18:37"
 	buildTime := 1466810317.0
 	buildUser := "root"
-	var masterResponse = &master.Response{
+	var masterResponse = &mesos_v1_master.Response{
 		Type: &masterCallType,
-		GetVersion: &master.Response_GetVersion{
-			VersionInfo: &mesos.VersionInfo{
+		GetVersion: &mesos_v1_master.Response_GetVersion{
+			VersionInfo: &mesos_v1.VersionInfo{
 				Version:   &version,
 				BuildDate: &buildDate,
 				BuildTime: &buildTime,
@@ -65,15 +65,15 @@ func TestclientGetVersion(t *testing.T) {
 	defer s.Teardown()
 
 	// Create Mock Response
-	agentCallType := agent.Response_GET_VERSION
+	mesos_v1_agentCallType := mesos_v1_agent.Response_GET_VERSION
 	version := "1.0.0"
 	buildDate := "2016-06-24 23:18:37"
 	buildTime := 1466810317.0
 	buildUser := "root"
-	var agentResponse = &agent.Response{
-		Type: &agentCallType,
-		GetVersion: &agent.Response_GetVersion{
-			VersionInfo: &mesos.VersionInfo{
+	var mesos_v1_agentResponse = &mesos_v1_agent.Response{
+		Type: &mesos_v1_agentCallType,
+		GetVersion: &mesos_v1_agent.Response_GetVersion{
+			VersionInfo: &mesos_v1.VersionInfo{
 				Version:   &version,
 				BuildDate: &buildDate,
 				BuildTime: &buildTime,
@@ -81,7 +81,7 @@ func TestclientGetVersion(t *testing.T) {
 			},
 		},
 	}
-	output, err := proto.Marshal(agentResponse)
+	output, err := proto.Marshal(mesos_v1_agentResponse)
 	if err != nil {
 		t.Fatal(err)
 	}

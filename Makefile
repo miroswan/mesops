@@ -1,10 +1,4 @@
-.PHONY: dev smoke proto
-
-PKG_ROOT := github.com/miroswan/mesops/pkg
-
-define protoc_gen
-	cd ${GOPATH}/src; protoc -I . --go_out=. ${PKG_ROOT}/v1/${1}/${1}.proto
-endef
+.PHONY: dev smoke unit
 
 vagrant := /usr/local/bin/vagrant
 
@@ -22,11 +16,3 @@ smoke:
 
 unit:
 	@go test -v -cover github.com/miroswan/mesops/pkg/v1
-
-proto:
-	$(call protoc_gen,mesos)
-	$(call protoc_gen,quota)
-	$(call protoc_gen,maintenance)
-	$(call protoc_gen,allocator)
-	$(call protoc_gen,agent)
-	$(call protoc_gen,master)

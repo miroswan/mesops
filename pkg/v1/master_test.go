@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestNewMasterBuilder(t *testing.T) {
@@ -56,15 +56,15 @@ func TestGetMaster(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_MASTER
+	responseType := mesos_v1_master.Response_GET_MASTER
 	id := "test-id"
 	ip, _ := IPv4toUint32("127.0.0.1")
 	ip32 := uint32(ip)
 	port := uint32(65000)
-	response := master.Response{
+	response := mesos_v1_master.Response{
 		Type: &responseType,
-		GetMaster: &master.Response_GetMaster{
-			MasterInfo: &mesos.MasterInfo{
+		GetMaster: &mesos_v1_master.Response_GetMaster{
+			MasterInfo: &mesos_v1.MasterInfo{
 				Id:   &id,
 				Ip:   &ip32,
 				Port: &port,

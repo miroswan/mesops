@@ -3,8 +3,8 @@ package v1
 import (
 	"testing"
 
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestReserveResources(t *testing.T) {
@@ -15,12 +15,12 @@ func TestReserveResources(t *testing.T) {
 
 	slaveId := "test-slave"
 	resourceName := "test-mem"
-	resourceValue := mesos.Value_Type(1.0)
+	resourceValue := mesos_v1.Value_Type(1.0)
 
-	call := &master.Call_ReserveResources{
-		SlaveId: &mesos.SlaveID{Value: &slaveId},
-		Resources: []*mesos.Resource{
-			&mesos.Resource{
+	call := &mesos_v1_master.Call_ReserveResources{
+		AgentId: &mesos_v1.AgentID{Value: &slaveId},
+		Resources: []*mesos_v1.Resource{
+			&mesos_v1.Resource{
 				Name: &resourceName,
 				Type: &resourceValue,
 			},
@@ -41,12 +41,12 @@ func TestUnreserveResources(t *testing.T) {
 
 	slaveId := "test-slave"
 	resourceName := "test-mem"
-	resourceValue := mesos.Value_Type(1.0)
+	resourceValue := mesos_v1.Value_Type(1.0)
 
-	call := &master.Call_UnreserveResources{
-		SlaveId: &mesos.SlaveID{Value: &slaveId},
-		Resources: []*mesos.Resource{
-			&mesos.Resource{
+	call := &mesos_v1_master.Call_UnreserveResources{
+		AgentId: &mesos_v1.AgentID{Value: &slaveId},
+		Resources: []*mesos_v1.Resource{
+			&mesos_v1.Resource{
 				Name: &resourceName,
 				Type: &resourceValue,
 			},

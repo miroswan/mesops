@@ -4,23 +4,23 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterGetFlags(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_FLAGS
+	responseType := mesos_v1_master.Response_GET_FLAGS
 	responseName := "authenticate_http_readonly"
 	responseValue := "true"
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type: &responseType,
-		GetFlags: &master.Response_GetFlags{
-			Flags: []*mesos.Flag{
-				&mesos.Flag{Name: &responseName, Value: &responseValue},
+		GetFlags: &mesos_v1_master.Response_GetFlags{
+			Flags: []*mesos_v1.Flag{
+				&mesos_v1.Flag{Name: &responseName, Value: &responseValue},
 			},
 		},
 	}
@@ -46,14 +46,14 @@ func TestAgentGetFlags(t *testing.T) {
 	s := NewTestProtobufServer(AgentClient)
 	defer s.Teardown()
 
-	responseType := agent.Response_GET_FLAGS
+	responseType := mesos_v1_agent.Response_GET_FLAGS
 	responseName := "authenticate_http_readonly"
 	responseValue := "true"
-	response := &agent.Response{
+	response := &mesos_v1_agent.Response{
 		Type: &responseType,
-		GetFlags: &agent.Response_GetFlags{
-			Flags: []*mesos.Flag{
-				&mesos.Flag{Name: &responseName, Value: &responseValue},
+		GetFlags: &mesos_v1_agent.Response_GetFlags{
+			Flags: []*mesos_v1.Flag{
+				&mesos_v1.Flag{Name: &responseName, Value: &responseValue},
 			},
 		},
 	}

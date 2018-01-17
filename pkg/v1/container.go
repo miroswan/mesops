@@ -28,23 +28,24 @@ import (
 	"io"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
+
+	"github.com/mesos/go-proto/mesos/v1/agent"
 )
 
-// GetContainers retrieves information about containers running on this agent.
+// GetContainers retrieves information about containers running on this mesos_v1_agent.
 // It contains ContainerStatus and ResourceStatistics along with some metadata
 // of the containers.
-func (a *Agent) GetContainers(ctx context.Context) (response *agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_CONTAINERS)
+func (a *Agent) GetContainers(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
+	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_CONTAINERS)
 	return
 }
 
 // LaunchNestedContainer launches a nested container. Any authorized entity,
 // including the executor itself, its tasks, or the operator can use this API to
 // launch a nested container.
-func (a *Agent) LaunchNestedContainer(ctx context.Context, call *agent.Call_LaunchNestedContainer) (err error) {
-	var callType agent.Call_Type = agent.Call_LAUNCH_NESTED_CONTAINER
-	var payload proto.Message = &agent.Call{Type: &callType, LaunchNestedContainer: call}
+func (a *Agent) LaunchNestedContainer(ctx context.Context, call *mesos_v1_agent.Call_LaunchNestedContainer) (err error) {
+	var callType mesos_v1_agent.Call_Type = mesos_v1_agent.Call_LAUNCH_NESTED_CONTAINER
+	var payload proto.Message = &mesos_v1_agent.Call{Type: &callType, LaunchNestedContainer: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {
@@ -58,12 +59,12 @@ func (a *Agent) LaunchNestedContainer(ctx context.Context, call *agent.Call_Laun
 // WaitNestedContainer waits for a nested container to terminate or exit. Any
 // authorized entity, including the executor itself, its tasks, or the operator
 // can use this API to wait on a nested container.
-func (a *Agent) WaitNestedContainer(ctx context.Context, call *agent.Call_WaitNestedContainer) (
-	response *agent.Response, err error,
+func (a *Agent) WaitNestedContainer(ctx context.Context, call *mesos_v1_agent.Call_WaitNestedContainer) (
+	response *mesos_v1_agent.Response, err error,
 ) {
 	// Build message
-	var callType agent.Call_Type = agent.Call_WAIT_NESTED_CONTAINER
-	var payload proto.Message = &agent.Call{Type: &callType, WaitNestedContainer: call}
+	var callType mesos_v1_agent.Call_Type = mesos_v1_agent.Call_WAIT_NESTED_CONTAINER
+	var payload proto.Message = &mesos_v1_agent.Call{Type: &callType, WaitNestedContainer: call}
 	var b []byte
 	// Encode to protobuf
 	b, err = proto.Marshal(payload)
@@ -71,7 +72,7 @@ func (a *Agent) WaitNestedContainer(ctx context.Context, call *agent.Call_WaitNe
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	response = &agent.Response{}
+	response = &mesos_v1_agent.Response{}
 	// Send HTTP Request
 	_, err = a.client.doProtoWrapper(ctx, buf, response)
 	return
@@ -80,9 +81,9 @@ func (a *Agent) WaitNestedContainer(ctx context.Context, call *agent.Call_WaitNe
 // KillNestedContainer initiates the destruction of a nested container. Any
 // authorized entity, including the executor itself, its tasks, or the operator
 // can use this API to kill a nested container.
-func (a *Agent) KillNestedContainer(ctx context.Context, call *agent.Call_KillNestedContainer) (err error) {
-	var callType agent.Call_Type = agent.Call_KILL_NESTED_CONTAINER
-	var payload proto.Message = &agent.Call{Type: &callType, KillNestedContainer: call}
+func (a *Agent) KillNestedContainer(ctx context.Context, call *mesos_v1_agent.Call_KillNestedContainer) (err error) {
+	var callType mesos_v1_agent.Call_Type = mesos_v1_agent.Call_KILL_NESTED_CONTAINER
+	var payload proto.Message = &mesos_v1_agent.Call{Type: &callType, KillNestedContainer: call}
 	var b []byte
 	b, err = proto.Marshal(payload)
 	if err != nil {

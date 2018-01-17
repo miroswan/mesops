@@ -4,21 +4,20 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterGetLoggingLevel(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_LOGGING_LEVEL
+	responseType := mesos_v1_master.Response_GET_LOGGING_LEVEL
 	responseLoggingLevel := uint32(1)
-	response := master.Response{
+	response := mesos_v1_master.Response{
 		Type: &responseType,
-		GetLoggingLevel: &master.Response_GetLoggingLevel{
+		GetLoggingLevel: &mesos_v1_master.Response_GetLoggingLevel{
 			Level: &responseLoggingLevel,
 		},
 	}
@@ -45,11 +44,11 @@ func TestAgentGetLoggingLevel(t *testing.T) {
 	s := NewTestProtobufServer(AgentClient)
 	defer s.Teardown()
 
-	responseType := agent.Response_GET_LOGGING_LEVEL
+	responseType := mesos_v1_agent.Response_GET_LOGGING_LEVEL
 	responseLoggingLevel := uint32(1)
-	response := agent.Response{
+	response := mesos_v1_agent.Response{
 		Type: &responseType,
-		GetLoggingLevel: &agent.Response_GetLoggingLevel{
+		GetLoggingLevel: &mesos_v1_agent.Response_GetLoggingLevel{
 			Level: &responseLoggingLevel,
 		},
 	}
@@ -80,9 +79,9 @@ func TestMasterSetLoggingLevel(t *testing.T) {
 
 	level := uint32(1)
 	nanoseconds := int64(2000000)
-	err := s.Master().SetLoggingLevel(s.Ctx(), &master.Call_SetLoggingLevel{
+	err := s.Master().SetLoggingLevel(s.Ctx(), &mesos_v1_master.Call_SetLoggingLevel{
 		Level:    &level,
-		Duration: &mesos.DurationInfo{Nanoseconds: &nanoseconds},
+		Duration: &mesos_v1.DurationInfo{Nanoseconds: &nanoseconds},
 	})
 
 	if err != nil {

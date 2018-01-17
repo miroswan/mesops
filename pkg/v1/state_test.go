@@ -4,20 +4,20 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterGetState(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_STATE
-	response := &master.Response{
+	responseType := mesos_v1_master.Response_GET_STATE
+	response := &mesos_v1_master.Response{
 		Type: &responseType,
 		// GetTasks, GetExecutors, GetFrameworks, and GetAgents are all optional.
 		// TODO Add these in later
-		GetState: &master.Response_GetState{},
+		GetState: &mesos_v1_master.Response_GetState{},
 	}
 
 	output, err := proto.Marshal(response)
@@ -32,8 +32,8 @@ func TestMasterGetState(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if *data.Type != master.Response_GET_STATE {
-		t.Errorf("expected %v, got %v", master.Response_GET_STATE, *data.Type)
+	if *data.Type != mesos_v1_master.Response_GET_STATE {
+		t.Errorf("expected %v, got %v", mesos_v1_master.Response_GET_STATE, *data.Type)
 	}
 }
 
@@ -41,12 +41,12 @@ func TestAgentGetState(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := agent.Response_GET_STATE
-	response := &agent.Response{
+	responseType := mesos_v1_agent.Response_GET_STATE
+	response := &mesos_v1_agent.Response{
 		Type: &responseType,
 		// GetTasks, GetExecutors, GetFrameworks, and GetAgents are all optional.
 		// TODO Add these in later
-		GetState: &agent.Response_GetState{},
+		GetState: &mesos_v1_agent.Response_GetState{},
 	}
 
 	output, err := proto.Marshal(response)
@@ -61,7 +61,7 @@ func TestAgentGetState(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if *data.Type != agent.Response_GET_STATE {
-		t.Errorf("expected %v, got %v", agent.Response_GET_STATE, *data.Type)
+	if *data.Type != mesos_v1_agent.Response_GET_STATE {
+		t.Errorf("expected %v, got %v", mesos_v1_agent.Response_GET_STATE, *data.Type)
 	}
 }

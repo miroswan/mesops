@@ -4,9 +4,8 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestGetAgents(t *testing.T) {
@@ -16,16 +15,16 @@ func TestGetAgents(t *testing.T) {
 	// Setup Response
 	active := true
 	hostname := "test"
-	responseType := master.Response_GET_AGENTS
+	responseType := mesos_v1_master.Response_GET_AGENTS
 	version := "1.4.1"
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type: &responseType,
-		GetAgents: &master.Response_GetAgents{
-			Agents: []*master.Response_GetAgents_Agent{
-				&master.Response_GetAgents_Agent{
+		GetAgents: &mesos_v1_master.Response_GetAgents{
+			Agents: []*mesos_v1_master.Response_GetAgents_Agent{
+				&mesos_v1_master.Response_GetAgents_Agent{
 					Active:  &active,
 					Version: &version,
-					AgentInfo: &mesos.SlaveInfo{
+					AgentInfo: &mesos_v1.AgentInfo{
 						Hostname: &hostname,
 					},
 				},

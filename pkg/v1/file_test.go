@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterListFiles(t *testing.T) {
@@ -14,7 +14,7 @@ func TestMasterListFiles(t *testing.T) {
 	defer s.Teardown()
 
 	// Setup Response
-	callType := master.Response_LIST_FILES
+	callType := mesos_v1_master.Response_LIST_FILES
 	gid := "root"
 	mode := uint32(16877)
 	nlink := int32(2)
@@ -23,18 +23,18 @@ func TestMasterListFiles(t *testing.T) {
 	uid := "root"
 	nanoseconds := int64(1470820172000000000)
 
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type: &callType,
-		ListFiles: &master.Response_ListFiles{
-			FileInfos: []*mesos.FileInfo{
-				&mesos.FileInfo{
+		ListFiles: &mesos_v1_master.Response_ListFiles{
+			FileInfos: []*mesos_v1.FileInfo{
+				&mesos_v1.FileInfo{
 					Gid:   &gid,
 					Mode:  &mode,
 					Nlink: &nlink,
 					Path:  &path,
 					Size:  &size,
 					Uid:   &uid,
-					Mtime: &mesos.TimeInfo{Nanoseconds: &nanoseconds},
+					Mtime: &mesos_v1.TimeInfo{Nanoseconds: &nanoseconds},
 				},
 			},
 		},
@@ -50,7 +50,7 @@ func TestMasterListFiles(t *testing.T) {
 
 	// Setup Payload
 	respPath := "one"
-	newResponse, err := s.Master().ListFiles(s.Ctx(), &master.Call_ListFiles{Path: &respPath})
+	newResponse, err := s.Master().ListFiles(s.Ctx(), &mesos_v1_master.Call_ListFiles{Path: &respPath})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,7 +86,7 @@ func TestAgentListFiles(t *testing.T) {
 	defer s.Teardown()
 
 	// Setup Response
-	callType := agent.Response_LIST_FILES
+	callType := mesos_v1_agent.Response_LIST_FILES
 	gid := "root"
 	mode := uint32(16877)
 	nlink := int32(2)
@@ -95,18 +95,18 @@ func TestAgentListFiles(t *testing.T) {
 	uid := "root"
 	nanoseconds := int64(1470820172000000000)
 
-	response := &agent.Response{
+	response := &mesos_v1_agent.Response{
 		Type: &callType,
-		ListFiles: &agent.Response_ListFiles{
-			FileInfos: []*mesos.FileInfo{
-				&mesos.FileInfo{
+		ListFiles: &mesos_v1_agent.Response_ListFiles{
+			FileInfos: []*mesos_v1.FileInfo{
+				&mesos_v1.FileInfo{
 					Gid:   &gid,
 					Mode:  &mode,
 					Nlink: &nlink,
 					Path:  &path,
 					Size:  &size,
 					Uid:   &uid,
-					Mtime: &mesos.TimeInfo{Nanoseconds: &nanoseconds},
+					Mtime: &mesos_v1.TimeInfo{Nanoseconds: &nanoseconds},
 				},
 			},
 		},
@@ -123,7 +123,7 @@ func TestAgentListFiles(t *testing.T) {
 
 	// Setup Payload
 	respPath := "one"
-	newResponse, err := s.Agent().ListFiles(s.Ctx(), &agent.Call_ListFiles{Path: &respPath})
+	newResponse, err := s.Agent().ListFiles(s.Ctx(), &mesos_v1_agent.Call_ListFiles{Path: &respPath})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -159,11 +159,11 @@ func TestMasterReadFile(t *testing.T) {
 	defer s.Teardown()
 
 	// Setup Response
-	responseType := master.Response_READ_FILE
+	responseType := mesos_v1_master.Response_READ_FILE
 	size := uint64(4)
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type: &responseType,
-		ReadFile: &master.Response_ReadFile{
+		ReadFile: &mesos_v1_master.Response_ReadFile{
 			Size: &size,
 			Data: []byte("test"),
 		},
@@ -181,7 +181,7 @@ func TestMasterReadFile(t *testing.T) {
 	// Setup Payload
 	callPath := "file.txt"
 	callOffset := uint64(0)
-	call := &master.Call_ReadFile{Path: &callPath, Offset: &callOffset}
+	call := &mesos_v1_master.Call_ReadFile{Path: &callPath, Offset: &callOffset}
 
 	res, err := s.Master().ReadFile(s.Ctx(), call)
 	if err != nil {
@@ -199,11 +199,11 @@ func TestAgentReadFile(t *testing.T) {
 	defer s.Teardown()
 
 	// Setup Response
-	responseType := agent.Response_READ_FILE
+	responseType := mesos_v1_agent.Response_READ_FILE
 	size := uint64(4)
-	response := &agent.Response{
+	response := &mesos_v1_agent.Response{
 		Type: &responseType,
-		ReadFile: &agent.Response_ReadFile{
+		ReadFile: &mesos_v1_agent.Response_ReadFile{
 			Size: &size,
 			Data: []byte("test"),
 		},
@@ -221,7 +221,7 @@ func TestAgentReadFile(t *testing.T) {
 	// Setup Payload
 	callPath := "file.txt"
 	callOffset := uint64(0)
-	call := &agent.Call_ReadFile{Path: &callPath, Offset: &callOffset}
+	call := &mesos_v1_agent.Call_ReadFile{Path: &callPath, Offset: &callOffset}
 
 	res, err := s.Agent().ReadFile(s.Ctx(), call)
 	if err != nil {

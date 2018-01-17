@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterGetFramework(t *testing.T) {
@@ -19,13 +19,13 @@ func TestMasterGetFramework(t *testing.T) {
 	frameworkConnected := true
 	frameworkRecovered := true
 
-	responseType := master.Response_GET_FRAMEWORKS
-	response := master.Response{
+	responseType := mesos_v1_master.Response_GET_FRAMEWORKS
+	response := mesos_v1_master.Response{
 		Type: &responseType,
-		GetFrameworks: &master.Response_GetFrameworks{
-			Frameworks: []*master.Response_GetFrameworks_Framework{
-				&master.Response_GetFrameworks_Framework{
-					FrameworkInfo: &mesos.FrameworkInfo{
+		GetFrameworks: &mesos_v1_master.Response_GetFrameworks{
+			Frameworks: []*mesos_v1_master.Response_GetFrameworks_Framework{
+				&mesos_v1_master.Response_GetFrameworks_Framework{
+					FrameworkInfo: &mesos_v1.FrameworkInfo{
 						User: &frameworkUser,
 						Name: &frameworkName,
 					},
@@ -79,13 +79,13 @@ func TestAgentGetFramework(t *testing.T) {
 	frameworkUser := "root"
 	frameworkName := "test-framework"
 
-	responseType := agent.Response_GET_FRAMEWORKS
-	response := agent.Response{
+	responseType := mesos_v1_agent.Response_GET_FRAMEWORKS
+	response := mesos_v1_agent.Response{
 		Type: &responseType,
-		GetFrameworks: &agent.Response_GetFrameworks{
-			Frameworks: []*agent.Response_GetFrameworks_Framework{
-				&agent.Response_GetFrameworks_Framework{
-					FrameworkInfo: &mesos.FrameworkInfo{
+		GetFrameworks: &mesos_v1_agent.Response_GetFrameworks{
+			Frameworks: []*mesos_v1_agent.Response_GetFrameworks_Framework{
+				&mesos_v1_agent.Response_GetFrameworks_Framework{
+					FrameworkInfo: &mesos_v1.FrameworkInfo{
 						User: &frameworkUser,
 						Name: &frameworkName,
 					},

@@ -27,9 +27,9 @@ Operator API you will find a package under pkg with the corresponding name.
 v1 is the current and only release for the Mesos Operator API at the time of
 this writing.
 
-mesops aims to keep things simple by minimally abstracting the Operator API
-with Protobuf content. Furthermore, proto is the only external dependency of
-this project. Since the project has not yet reached stability, you may want to
-vendor this library using a package dependency manager such as glide or gb.
+mesops aims to keep things simple by encapsulating HTTP and Protobuf concerns
+and providing an API consistent with what you'll find in the Mesos documentation.
+Since the project has not yet reached stability, you may want to vendor this
+library using a package dependency manager such as glide or gb.
 */
 package mesops

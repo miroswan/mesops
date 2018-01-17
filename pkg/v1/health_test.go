@@ -4,19 +4,19 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterHGetealth(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 	// Setup Response
-	callType := master.Response_GET_HEALTH
+	callType := mesos_v1_master.Response_GET_HEALTH
 	healthy := true
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type:      &callType,
-		GetHealth: &master.Response_GetHealth{Healthy: &healthy},
+		GetHealth: &mesos_v1_master.Response_GetHealth{Healthy: &healthy},
 	}
 	output, err := proto.Marshal(response)
 	if err != nil {
@@ -43,11 +43,11 @@ func TestAgentGetHealth(t *testing.T) {
 	s := NewTestProtobufServer(AgentClient)
 	defer s.Teardown()
 	// Setup Response
-	callType := agent.Response_GET_HEALTH
+	callType := mesos_v1_agent.Response_GET_HEALTH
 	healthy := true
-	response := &agent.Response{
+	response := &mesos_v1_agent.Response{
 		Type:      &callType,
-		GetHealth: &agent.Response_GetHealth{Healthy: &healthy},
+		GetHealth: &mesos_v1_agent.Response_GetHealth{Healthy: &healthy},
 	}
 	output, err := proto.Marshal(response)
 	if err != nil {

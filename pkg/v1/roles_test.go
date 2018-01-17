@@ -4,22 +4,22 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestGetRoles(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_ROLES
+	responseType := mesos_v1_master.Response_GET_ROLES
 	name := "test-role"
 	weight := float64(1.0)
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type: &responseType,
-		GetRoles: &master.Response_GetRoles{
-			Roles: []*mesos.Role{
-				&mesos.Role{
+		GetRoles: &mesos_v1_master.Response_GetRoles{
+			Roles: []*mesos_v1.Role{
+				&mesos_v1.Role{
 					Name:   &name,
 					Weight: &weight,
 				},

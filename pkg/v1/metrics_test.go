@@ -4,23 +4,23 @@ import (
 	"testing"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
-	"github.com/miroswan/mesops/pkg/v1/mesos"
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 func TestMasterGetMetrics(t *testing.T) {
 	s := NewTestProtobufServer(MasterClient)
 	defer s.Teardown()
 
-	responseType := master.Response_GET_METRICS
+	responseType := mesos_v1_master.Response_GET_METRICS
 	name := "fake-metric"
 	value := 1.0
-	response := &master.Response{
+	response := &mesos_v1_master.Response{
 		Type: &responseType,
-		GetMetrics: &master.Response_GetMetrics{
-			Metrics: []*mesos.Metric{
-				&mesos.Metric{
+		GetMetrics: &mesos_v1_master.Response_GetMetrics{
+			Metrics: []*mesos_v1.Metric{
+				&mesos_v1.Metric{
 					Name:  &name,
 					Value: &value,
 				},
@@ -56,14 +56,14 @@ func TestAgentGetMetrics(t *testing.T) {
 	s := NewTestProtobufServer(AgentClient)
 	defer s.Teardown()
 
-	responseType := agent.Response_GET_METRICS
+	responseType := mesos_v1_agent.Response_GET_METRICS
 	name := "fake-metric"
 	value := 1.0
-	response := &agent.Response{
+	response := &mesos_v1_agent.Response{
 		Type: &responseType,
-		GetMetrics: &agent.Response_GetMetrics{
-			Metrics: []*mesos.Metric{
-				&mesos.Metric{
+		GetMetrics: &mesos_v1_agent.Response_GetMetrics{
+			Metrics: []*mesos_v1.Metric{
+				&mesos_v1.Metric{
 					Name:  &name,
 					Value: &value,
 				},

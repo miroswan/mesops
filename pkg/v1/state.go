@@ -25,18 +25,18 @@ package v1
 import (
 	"context"
 
-	"github.com/miroswan/mesops/pkg/v1/agent"
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/agent"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 // GetState retrieves the overall cluster state.
-func (m *Master) GetState(ctx context.Context) (response *master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_STATE)
+func (m *Master) GetState(ctx context.Context) (response *mesos_v1_master.Response, err error) {
+	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_STATE)
 	return
 }
 
 // GetState retrieves the overall cluster state.
-func (a *Agent) GetState(ctx context.Context) (response *agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, agent.Call_GET_STATE)
+func (a *Agent) GetState(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
+	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_STATE)
 	return
 }

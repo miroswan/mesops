@@ -25,11 +25,11 @@ package v1
 import (
 	"context"
 
-	"github.com/miroswan/mesops/pkg/v1/master"
+	"github.com/mesos/go-proto/mesos/v1/master"
 )
 
 // GetRoles queries the information about roles.
-func (m *Master) GetRoles(ctx context.Context) (response *master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, master.Call_GET_ROLES)
+func (m *Master) GetRoles(ctx context.Context) (response *mesos_v1_master.Response, err error) {
+	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_ROLES)
 	return
 }
