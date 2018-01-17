@@ -38,7 +38,7 @@ func (m *Master) GetLoggingLevel(ctx context.Context) (response *mesos_v1_master
 	return
 }
 
-// GetLoggingLevel retrieves the mesos_v1_agent's logging level.
+// GetLoggingLevel retrieves the agent's logging level.
 func (a *Agent) GetLoggingLevel(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
 	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_LOGGING_LEVEL)
 	return
@@ -63,7 +63,7 @@ func (m *Master) SetLoggingLevel(ctx context.Context, call *mesos_v1_master.Call
 }
 
 // SetLoggingLevel sets the logging verbosity level for a specified duration for
-// mesos_v1_agent. Mesos uses glog for logging. The library only uses verbose logging
+// agent. Mesos uses glog for logging. The library only uses verbose logging
 // which means nothing will be output unless the verbosity level is set
 // (by default it’s 0, libprocess uses levels 1, 2, and 3).
 func (a *Agent) SetLoggingLevel(ctx context.Context, call *mesos_v1_agent.Call_SetLoggingLevel) (err error) {

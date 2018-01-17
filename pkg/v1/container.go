@@ -32,7 +32,7 @@ import (
 	"github.com/mesos/go-proto/mesos/v1/agent"
 )
 
-// GetContainers retrieves information about containers running on this mesos_v1_agent.
+// GetContainers retrieves information about containers running on this agent.
 // It contains ContainerStatus and ResourceStatistics along with some metadata
 // of the containers.
 func (a *Agent) GetContainers(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
