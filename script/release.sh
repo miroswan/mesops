@@ -93,6 +93,9 @@ main(){
   show "commiting CHANGELOG.md"
   git commit -am "updating CHANGELOG.md" || return $?
 
+  show "pushing CHANGELOG.md updates to release/$TARGET_VERSION"
+  git push origin "release/$TARGET_VERSION" || return $?
+
   show "checking out to dev"
   git checkout dev || return $?
 
@@ -110,7 +113,11 @@ main(){
 
   show "pushing updates to master"
   git push origin master || return $?
+
+  show "checking out back to dev"
+  git checkout dev || return $?
 }
+
 
 ################################################################################
 # Execute
