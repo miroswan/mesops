@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.3.3](https://github.com/miroswan/mesops/tree/v0.3.3) (2018-01-18)
+[Full Changelog](https://github.com/miroswan/mesops/compare/v0.3.2...v0.3.3)
+
+**Merged pull requests:**
+
+- closing request and response body [\#8](https://github.com/miroswan/mesops/pull/8) ([miroswan](https://github.com/miroswan))
+
 ## [v0.3.2](https://github.com/miroswan/mesops/tree/v0.3.2) (2018-01-18)
 [Full Changelog](https://github.com/miroswan/mesops/compare/v0.3.1...v0.3.2)
 
