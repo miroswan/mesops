@@ -30,11 +30,11 @@ and imports take the form of github.com/mesos/go-proto/mesos/v<VERSION>/<PACKAGE
 
 For example:
 
-import "github.com/mesos/go-proto/mesos/v1"
-import "github.com/mesos/go-proto/mesos/v1/master"
+  import "github.com/mesos/go-proto/mesos/v1"
+  import "github.com/mesos/go-proto/mesos/v1/master"
 
-var r *mesos_v1.Resource = &mesos_v1.Resource{...}
-var sq *mesos_v1_master.Call_SetQuota = &mesos_v1_master.Call_SetQuota{...}
+  var r *mesos_v1.Resource = &mesos_v1.Resource{...}
+  var sq *mesos_v1_master.Call_SetQuota = &mesos_v1_master.Call_SetQuota{...}
 
 The API contains two components: the Master and the Agent. The MasterAPI
 contains methods for interacting with the Mesos cluster through the Master. The
