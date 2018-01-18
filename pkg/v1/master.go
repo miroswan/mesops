@@ -108,6 +108,8 @@ func (m *Master) sendSimpleCall(ctx context.Context, callType mesos_v1_master.Ca
 
 // GetMaster retrieves information about the mesos_v1_master.
 func (m *Master) GetMaster(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MASTER)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MASTER)
+	defer httpResponse.Body.Close()
 	return
 }

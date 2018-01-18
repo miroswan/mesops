@@ -24,6 +24,7 @@ package v1
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/mesos/go-proto/mesos/v1/agent"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -31,12 +32,16 @@ import (
 
 // GetVersion retrieves the master’s version information.
 func (m *Master) GetVersion(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_VERSION)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_VERSION)
+	defer httpResponse.Body.Close()
 	return
 }
 
 // GetVersion retrieves the mesos_v1_agent's version information.
 func (a *Agent) GetVersion(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_VERSION)
+	var httpResponse *http.Response
+	response, httpResponse, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_VERSION)
+	defer httpResponse.Body.Close()
 	return
 }

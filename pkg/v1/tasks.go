@@ -24,6 +24,7 @@ package v1
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/mesos/go-proto/mesos/v1/agent"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -31,12 +32,16 @@ import (
 
 // GetTasks queries about all the tasks known to the mesos_v1_master.
 func (m *Master) GetTasks(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_TASKS)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_TASKS)
+	defer httpResponse.Body.Close()
 	return
 }
 
 // GetTasks queries about all the tasks known to the agent.
 func (a *Agent) GetTasks(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_TASKS)
+	var httpResponse *http.Response
+	response, httpResponse, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_TASKS)
+	defer httpResponse.Body.Close()
 	return
 }

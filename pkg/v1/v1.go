@@ -280,6 +280,8 @@ func (c *client) doProto(ctx context.Context, body io.Reader, pb proto.Message) 
 
 	req = req.WithContext(ctx)
 
+	defer req.Body.Close()
+
 	httpRes, err = c.httpclient.Do(req)
 	if err != nil {
 		return

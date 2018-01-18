@@ -26,6 +26,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/mesos/go-proto/mesos/v1/agent"
@@ -45,9 +46,11 @@ func (m *Master) ListFiles(ctx context.Context, call *mesos_v1_master.Call_ListF
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
+	var httpResponse *http.Response
 	response = &mesos_v1_master.Response{}
 	// Send HTTP Request
-	_, err = m.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, response)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -64,9 +67,11 @@ func (a *Agent) ListFiles(ctx context.Context, call *mesos_v1_agent.Call_ListFil
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
+	var httpResponse *http.Response
 	response = &mesos_v1_agent.Response{}
 	// Send HTTP Request
-	_, err = a.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = a.client.doProtoWrapper(ctx, buf, response)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -84,9 +89,11 @@ func (m *Master) ReadFile(ctx context.Context, call *mesos_v1_master.Call_ReadFi
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
+	var httpResponse *http.Response
 	response = &mesos_v1_master.Response{}
 	// Send HTTP Request
-	_, err = m.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, response)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -104,8 +111,10 @@ func (a *Agent) ReadFile(ctx context.Context, call *mesos_v1_agent.Call_ReadFile
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
+	var httpResponse *http.Response
 	response = &mesos_v1_agent.Response{}
 	// Send HTTP Request
-	_, err = a.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = a.client.doProtoWrapper(ctx, buf, response)
+	defer httpResponse.Body.Close()
 	return
 }

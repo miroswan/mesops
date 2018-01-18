@@ -26,6 +26,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/mesos/go-proto/mesos/v1/agent"
@@ -34,13 +35,17 @@ import (
 
 // GetLoggingLevel retrieves the master’s logging level.
 func (m *Master) GetLoggingLevel(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_LOGGING_LEVEL)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_LOGGING_LEVEL)
+	defer httpResponse.Body.Close()
 	return
 }
 
 // GetLoggingLevel retrieves the agent's logging level.
 func (a *Agent) GetLoggingLevel(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_LOGGING_LEVEL)
+	var httpResponse *http.Response
+	response, httpResponse, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_LOGGING_LEVEL)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -58,7 +63,9 @@ func (m *Master) SetLoggingLevel(ctx context.Context, call *mesos_v1_master.Call
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -76,6 +83,8 @@ func (a *Agent) SetLoggingLevel(ctx context.Context, call *mesos_v1_agent.Call_S
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = a.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = a.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }

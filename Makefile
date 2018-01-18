@@ -11,7 +11,7 @@ dev: ${vagrant}
 	vagrant up --provision
 	@echo "You can now get to mesos at http://192.168.33.10:5050 and http://192.168.33.10:5050/api/v1"
 
-smoke:
+smoke: ${vagrant}
 	@go test -v github.com/miroswan/mesops/test/smoke
 
 unit:
