@@ -26,6 +26,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogo/protobuf/proto"
 
@@ -36,7 +37,9 @@ import (
 // It contains ContainerStatus and ResourceStatistics along with some metadata
 // of the containers.
 func (a *Agent) GetContainers(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_CONTAINERS)
+	var httpResponse *http.Response
+	response, httpResponse, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_CONTAINERS)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -52,7 +55,9 @@ func (a *Agent) LaunchNestedContainer(ctx context.Context, call *mesos_v1_agent.
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = a.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = a.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }
 

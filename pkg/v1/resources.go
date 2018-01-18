@@ -26,6 +26,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -41,7 +42,9 @@ func (m *Master) ReserveResource(ctx context.Context, call *mesos_v1_master.Call
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -55,6 +58,8 @@ func (m *Master) UnreserveResource(ctx context.Context, call *mesos_v1_master.Ca
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse.Body.Close()
 	return
 }

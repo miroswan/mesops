@@ -26,6 +26,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -33,7 +34,9 @@ import (
 
 // GetQuota retrieves the cluster’s configured quotas.
 func (m *Master) GetQuota(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_QUOTA)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_QUOTA)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -47,7 +50,9 @@ func (m *Master) SetQuota(ctx context.Context, call *mesos_v1_master.Call_SetQuo
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -61,6 +66,8 @@ func (m *Master) RemoveQuota(ctx context.Context, call *mesos_v1_master.Call_Rem
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }

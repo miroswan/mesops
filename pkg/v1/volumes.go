@@ -26,6 +26,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -44,7 +45,9 @@ func (m *Master) CreateVolumes(ctx context.Context, call *mesos_v1_master.Call_C
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -59,6 +62,8 @@ func (m *Master) DestroyVolumes(ctx context.Context, call *mesos_v1_master.Call_
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }

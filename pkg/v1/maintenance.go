@@ -26,6 +26,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -33,13 +34,17 @@ import (
 
 // GetMaintenanceStatus retrieves the cluster’s maintenance status.
 func (m *Master) GetMaintenanceStatus(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MAINTENANCE_STATUS)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MAINTENANCE_STATUS)
+	defer httpResponse.Body.Close()
 	return
 }
 
 // GetMaintenanceSchedule retrieves the cluster’s maintenance schedule.
 func (m *Master) GetMaintenanceSchedule(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MAINTENANCE_SCHEDULE)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MAINTENANCE_SCHEDULE)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -56,7 +61,9 @@ func (m *Master) UpdateMaintenanceSchedule(ctx context.Context, call *mesos_v1_m
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -74,7 +81,9 @@ func (m *Master) StartMaintenance(ctx context.Context, call *mesos_v1_master.Cal
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -89,6 +98,8 @@ func (m *Master) StopMaintenance(ctx context.Context, call *mesos_v1_master.Call
 	var b []byte
 	b, err = proto.Marshal(payload)
 	var buf io.Reader = bytes.NewBuffer(b)
-	_, err = m.client.doProtoWrapper(ctx, buf, nil)
+	var httpResponse *http.Response
+	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	defer httpResponse.Body.Close()
 	return
 }

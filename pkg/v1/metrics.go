@@ -24,6 +24,7 @@ package v1
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/mesos/go-proto/mesos/v1/agent"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -34,7 +35,9 @@ import (
 // the API will take to respond. If the timeout is exceeded, some metrics may
 // not be included in the response.
 func (m *Master) GetMetrics(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_METRICS)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_METRICS)
+	defer httpResponse.Body.Close()
 	return
 }
 
@@ -43,6 +46,8 @@ func (m *Master) GetMetrics(ctx context.Context) (response *mesos_v1_master.Resp
 // the API will take to respond. If the timeout is exceeded, some metrics may
 // not be included in the response.
 func (a *Agent) GetMetrics(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_METRICS)
+	var httpResponse *http.Response
+	response, httpResponse, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_METRICS)
+	defer httpResponse.Body.Close()
 	return
 }

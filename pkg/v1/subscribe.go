@@ -58,6 +58,7 @@ func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
 		return
 	}
 	var reader *bufio.Reader = bufio.NewReader(httpResponse.Body)
+	defer httpResponse.Body.Close()
 	for {
 		select {
 		case <-ctx.Done():

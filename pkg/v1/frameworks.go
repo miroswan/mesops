@@ -24,6 +24,7 @@ package v1
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/mesos/go-proto/mesos/v1/agent"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -31,12 +32,16 @@ import (
 
 // GetFrameorks retrieves information about all the frameworks known to the mesos_v1_master.
 func (m *Master) GetFrameworks(ctx context.Context) (response *mesos_v1_master.Response, err error) {
-	response, _, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_FRAMEWORKS)
+	var httpResponse *http.Response
+	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_FRAMEWORKS)
+	defer httpResponse.Body.Close()
 	return
 }
 
 // GetFrameorks retrieves information about all the frameworks known to the mesos_v1_agent.
 func (a *Agent) GetFrameworks(ctx context.Context) (response *mesos_v1_agent.Response, err error) {
-	response, _, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_FRAMEWORKS)
+	var httpResponse *http.Response
+	response, httpResponse, err = a.sendSimpleCall(ctx, mesos_v1_agent.Call_GET_FRAMEWORKS)
+	defer httpResponse.Body.Close()
 	return
 }
