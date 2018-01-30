@@ -37,6 +37,35 @@ import (
 
 type EventStream chan *mesos_v1_master.Event
 
+func readRecordioMessage(reader *bufio.Reader) ([]byte, error) {
+	// Get size as string.
+	sizeString, err := reader.ReadString('\n')
+	if err != nil {
+		return []byte{}, err
+	}
+
+	// Convert string to int64.
+	sizeInt, err := strconv.ParseInt(strings.TrimSpace(sizeString), 10, 64)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	// Read data specified by the size.
+	eventBytes := make([]byte, sizeInt)
+	sizeRead := 0
+
+	for int64(sizeRead) < sizeInt {
+		n, err := reader.Read(eventBytes[sizeRead:])
+		if err != nil {
+			return []byte{}, err
+		}
+
+		sizeRead += n
+	}
+
+	return eventBytes, nil
+}
+
 // Subscribe subscribes to events on the Mesos mesos_v1_master. This method blocks, so
 // you. likely want to call it in a go routine. Process each *mesos_v1_master.Event on
 // the EventStream by checking the type (you may call GetType() on the
@@ -64,37 +93,15 @@ func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
 			err = ctx.Err()
 			return
 		default:
-			// Get size as string
-			var sizeString string
-			sizeString, err = reader.ReadString('\n')
+			var msg []byte
+			msg, err = readRecordioMessage(reader)
 			if err != nil {
 				return
 			}
-			sizeString = strings.TrimSpace(sizeString)
-			// Convert string to int64
-			var sizeInt int64
-			sizeInt, err = strconv.ParseInt(sizeString, 10, 64)
-			if err != nil {
-				return
-			}
-			// Read data specified by the size
-			var eventBytes = make([]byte, sizeInt)
-			var sizeRead int
-			sizeRead, err = reader.Read(eventBytes)
-			if err != nil {
-				return
-			}
-			for int64(sizeRead) < sizeInt {
-				var n int
-				n, err = reader.Read(eventBytes[sizeRead:])
-				if err != nil {
-					return
-				}
-				sizeRead += n
-			}
+
 			// Unmarshal data into a mesos_v1_master.Event
 			event := &mesos_v1_master.Event{}
-			err = proto.Unmarshal(eventBytes, event)
+			err = proto.Unmarshal(msg, event)
 			if err != nil {
 				return
 			}
