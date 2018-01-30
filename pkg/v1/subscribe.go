@@ -51,7 +51,6 @@ func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
 		return
 	}
 	var buf io.Reader = bytes.NewBuffer(b)
-	var event *mesos_v1_master.Event = &mesos_v1_master.Event{}
 	var httpResponse *http.Response
 	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
 	if err != nil {
@@ -76,24 +75,25 @@ func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
 			var sizeInt int64
 			sizeInt, err = strconv.ParseInt(sizeString, 10, 64)
 			if err != nil {
-				return err
+				return
 			}
 			// Read data specified by the size
 			var eventBytes = make([]byte, sizeInt)
-			var remaining int
-			remaining, err = reader.Read(eventBytes)
+			var sizeRead int
+			sizeRead, err = reader.Read(eventBytes)
 			if err != nil {
 				return
 			}
-			for int64(remaining) < sizeInt {
-				var moreEvent []byte = make([]byte, remaining)
-				remaining, err = reader.Read(moreEvent)
+			for int64(sizeRead) < sizeInt {
+				var n int
+				n, err = reader.Read(eventBytes[sizeRead:])
 				if err != nil {
 					return
 				}
-				eventBytes = append(eventBytes, moreEvent...)
+				sizeRead += n
 			}
 			// Unmarshal data into a mesos_v1_master.Event
+			event := &mesos_v1_master.Event{}
 			err = proto.Unmarshal(eventBytes, event)
 			if err != nil {
 				return
