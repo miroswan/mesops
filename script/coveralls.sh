@@ -28,7 +28,4 @@ if [ $exit_val -ne 0 ]; then
 fi
 
 # post it
-$HOME/gopath/bin/goveralls    \
-  -coverprofile=aggregate.out \
-  -service=travis-ci          \
-  -repotoken $COVERALLS_TOKEN
+$HOME/gopath/bin/goveralls -coverprofile=aggregate.out -service=travis-ci
