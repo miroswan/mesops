@@ -23,9 +23,7 @@
 package v1
 
 import (
-	"bytes"
 	"context"
-	"io"
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
@@ -38,15 +36,9 @@ import (
 // volumes at the agent might fail.
 func (m *Master) CreateVolumes(ctx context.Context, call *mesos_v1_master.Call_CreateVolumes) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_CREATE_VOLUMES
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, CreateVolumes: call}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, CreateVolumes: call}
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -55,15 +47,9 @@ func (m *Master) CreateVolumes(ctx context.Context, call *mesos_v1_master.Call_C
 // asynchronously to the Mesos agent where the reserved resources are located.
 func (m *Master) DestroyVolumes(ctx context.Context, call *mesos_v1_master.Call_DestroyVolumes) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_DESTROY_VOLUMES
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, DestroyVolumes: call}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, DestroyVolumes: call}
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }

@@ -23,9 +23,7 @@
 package v1
 
 import (
-	"bytes"
 	"context"
-	"io"
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
@@ -55,16 +53,9 @@ func (a *Agent) GetLoggingLevel(ctx context.Context) (response *mesos_v1_agent.R
 // (by default it’s 0, libprocess uses levels 1, 2, and 3).
 func (m *Master) SetLoggingLevel(ctx context.Context, call *mesos_v1_master.Call_SetLoggingLevel) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_SET_LOGGING_LEVEL
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, SetLoggingLevel: call}
-	var b []byte
-
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, SetLoggingLevel: call}
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -75,16 +66,9 @@ func (m *Master) SetLoggingLevel(ctx context.Context, call *mesos_v1_master.Call
 // (by default it’s 0, libprocess uses levels 1, 2, and 3).
 func (a *Agent) SetLoggingLevel(ctx context.Context, call *mesos_v1_agent.Call_SetLoggingLevel) (err error) {
 	var callType mesos_v1_agent.Call_Type = mesos_v1_agent.Call_SET_LOGGING_LEVEL
-	var payload proto.Message = &mesos_v1_agent.Call{Type: &callType, SetLoggingLevel: call}
-	var b []byte
-
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_agent.Call{Type: &callType, SetLoggingLevel: call}
 	var httpResponse *http.Response
-	httpResponse, err = a.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = a.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }

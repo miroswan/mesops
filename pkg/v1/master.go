@@ -59,7 +59,7 @@ func (b *MasterBuilder) SetHTTPClient(httpclient *http.Client) *MasterBuilder {
 }
 
 // SetMaxRetries sets maxRetries for the Agent and returns a pointer to an
-// MasterBuilder. If SetMaxRetries is not called, it will be set to 15 seconds.
+// MasterBuilder. If SetMaxRetries is not called, it will be set to 10.
 // Each HTTP request will retry up to the provided value upon failure.
 // Binary exponential backoff is implemented as specified by RFC2616
 //
@@ -110,6 +110,30 @@ func (m *Master) sendSimpleCall(ctx context.Context, callType mesos_v1_master.Ca
 func (m *Master) GetMaster(ctx context.Context) (response *mesos_v1_master.Response, err error) {
 	var httpResponse *http.Response
 	response, httpResponse, err = m.sendSimpleCall(ctx, mesos_v1_master.Call_GET_MASTER)
+	defer httpResponse.Body.Close()
+	return
+}
+
+// MarkAgentGone can be used by operators to assert that an agent instance has
+// failed and is never coming back
+// (e.g., ephemeral instance from cloud provider). The master would shutdown the
+//  agent and send TASK_GONE_BY_OPERATOR updates for all the running tasks.
+// This signal can be used by stateful frameworks to re-schedule their workloads
+// (volumes, reservations etc.) to other agent instances. It is possible that
+// the tasks might still be running if the operator’s assertion was wrong and
+// the agent was partitioned away from the master. The agent would be shutdown
+// when it tries to re-register with the master when the partition heals. This
+// call is idempotent.
+func (m *Master) MarkAgentGone(ctx context.Context, call *mesos_v1_master.Call_MarkAgentGone) (
+	response *mesos_v1_master.Response, err error,
+) {
+	// Build message
+	var httpResponse *http.Response
+	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_MARK_AGENT_GONE
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, MarkAgentGone: call}
+	response = &mesos_v1_master.Response{}
+	// Send HTTP Request
+	httpResponse, err = m.client.makeCall(ctx, message, response)
 	defer httpResponse.Body.Close()
 	return
 }

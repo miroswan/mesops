@@ -23,9 +23,7 @@
 package v1
 
 import (
-	"bytes"
 	"context"
-	"io"
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
@@ -35,15 +33,9 @@ import (
 // ReserveResource reserves resources dynamically on a specific mesos_v1_agent.
 func (m *Master) ReserveResource(ctx context.Context, call *mesos_v1_master.Call_ReserveResources) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_RESERVE_RESOURCES
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, ReserveResources: call}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, ReserveResources: call}
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -51,15 +43,9 @@ func (m *Master) ReserveResource(ctx context.Context, call *mesos_v1_master.Call
 // UnreserveResource unreserves resources dynamically on a specific mesos_v1_agent.
 func (m *Master) UnreserveResource(ctx context.Context, call *mesos_v1_master.Call_UnreserveResources) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_RESERVE_RESOURCES
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, UnreserveResources: call}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, UnreserveResources: call}
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
-	httpResponse.Body.Close()
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
+	defer httpResponse.Body.Close()
 	return
 }

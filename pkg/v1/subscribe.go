@@ -24,12 +24,8 @@ package v1
 
 import (
 	"bufio"
-	"bytes"
 	"context"
-	"io"
 	"net/http"
-	"strconv"
-	"strings"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/mesos/go-proto/mesos/v1/master"
@@ -37,51 +33,17 @@ import (
 
 type EventStream chan *mesos_v1_master.Event
 
-func readRecordioMessage(reader *bufio.Reader) ([]byte, error) {
-	// Get size as string.
-	sizeString, err := reader.ReadString('\n')
-	if err != nil {
-		return []byte{}, err
-	}
-
-	// Convert string to int64.
-	sizeInt, err := strconv.ParseInt(strings.TrimSpace(sizeString), 10, 64)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	// Read data specified by the size.
-	eventBytes := make([]byte, sizeInt)
-	sizeRead := 0
-
-	for int64(sizeRead) < sizeInt {
-		n, err := reader.Read(eventBytes[sizeRead:])
-		if err != nil {
-			return []byte{}, err
-		}
-
-		sizeRead += n
-	}
-
-	return eventBytes, nil
-}
-
 // Subscribe subscribes to events on the Mesos mesos_v1_master. This method blocks, so
 // you. likely want to call it in a go routine. Process each *mesos_v1_master.Event on
 // the EventStream by checking the type (you may call GetType() on the
 // *mesos_v1_master.Event), then processing the data as needed. See the test/cmd
 // package for an example.
 func (m *Master) Subscribe(ctx context.Context, es EventStream) (err error) {
+	var httpResponse *http.Response
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_SUBSCRIBE
 	var callMsg proto.Message = &mesos_v1_master.Call{Type: &callType}
-	var b []byte
-	b, err = proto.Marshal(callMsg)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
-	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+
+	httpResponse, err = m.client.makeCall(ctx, callMsg, nil)
 	if err != nil {
 		return
 	}

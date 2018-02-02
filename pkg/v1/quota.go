@@ -23,9 +23,7 @@
 package v1
 
 import (
-	"bytes"
 	"context"
-	"io"
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
@@ -43,15 +41,9 @@ func (m *Master) GetQuota(ctx context.Context) (response *mesos_v1_master.Respon
 // SetQuota sets the quota for resources to be used by a particular role.
 func (m *Master) SetQuota(ctx context.Context, call *mesos_v1_master.Call_SetQuota) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_SET_QUOTA
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, SetQuota: call}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, SetQuota: call}
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -59,15 +51,9 @@ func (m *Master) SetQuota(ctx context.Context, call *mesos_v1_master.Call_SetQuo
 // RemoveQuota  removes the quota for a particular role.
 func (m *Master) RemoveQuota(ctx context.Context, call *mesos_v1_master.Call_RemoveQuota) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_REMOVE_QUOTA
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, RemoveQuota: call}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, RemoveQuota: call}
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
