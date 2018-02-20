@@ -23,9 +23,7 @@
 package v1
 
 import (
-	"bytes"
 	"context"
-	"io"
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
@@ -38,18 +36,11 @@ import (
 // paths can be found at the files/debug endpoint
 func (m *Master) ListFiles(ctx context.Context, call *mesos_v1_master.Call_ListFiles) (response *mesos_v1_master.Response, err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_LIST_FILES
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, ListFiles: call}
-	var b []byte
-	// Encode to protobuf
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, ListFiles: call}
 	var httpResponse *http.Response
 	response = &mesos_v1_master.Response{}
 	// Send HTTP Request
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = m.client.makeCall(ctx, message, response)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -59,18 +50,11 @@ func (m *Master) ListFiles(ctx context.Context, call *mesos_v1_master.Call_ListF
 // paths can be found at the files/debug endpoint
 func (a *Agent) ListFiles(ctx context.Context, call *mesos_v1_agent.Call_ListFiles) (response *mesos_v1_agent.Response, err error) {
 	var callType mesos_v1_agent.Call_Type = mesos_v1_agent.Call_LIST_FILES
-	var payload proto.Message = &mesos_v1_agent.Call{Type: &callType, ListFiles: call}
-	var b []byte
-	// Encode to protobuf
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_agent.Call{Type: &callType, ListFiles: call}
 	var httpResponse *http.Response
 	response = &mesos_v1_agent.Response{}
 	// Send HTTP Request
-	httpResponse, err = a.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = a.client.makeCall(ctx, message, response)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -81,18 +65,11 @@ func (a *Agent) ListFiles(ctx context.Context, call *mesos_v1_agent.Call_ListFil
 // path must be a valid virtual file path.
 func (m *Master) ReadFile(ctx context.Context, call *mesos_v1_master.Call_ReadFile) (response *mesos_v1_master.Response, err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_READ_FILE
-	var payload proto.Message = &mesos_v1_master.Call{Type: &callType, ReadFile: call}
-	var b []byte
-	// Encode to protobuf
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_master.Call{Type: &callType, ReadFile: call}
 	var httpResponse *http.Response
 	response = &mesos_v1_master.Response{}
 	// Send HTTP Request
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = m.client.makeCall(ctx, message, response)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -103,18 +80,11 @@ func (m *Master) ReadFile(ctx context.Context, call *mesos_v1_master.Call_ReadFi
 // path must be a valid virtual file path.
 func (a *Agent) ReadFile(ctx context.Context, call *mesos_v1_agent.Call_ReadFile) (response *mesos_v1_agent.Response, err error) {
 	var callType mesos_v1_agent.Call_Type = mesos_v1_agent.Call_READ_FILE
-	var payload proto.Message = &mesos_v1_agent.Call{Type: &callType, ReadFile: call}
-	var b []byte
-	// Encode to protobuf
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
+	var message proto.Message = &mesos_v1_agent.Call{Type: &callType, ReadFile: call}
 	var httpResponse *http.Response
 	response = &mesos_v1_agent.Response{}
 	// Send HTTP Request
-	httpResponse, err = a.client.doProtoWrapper(ctx, buf, response)
+	httpResponse, err = a.client.makeCall(ctx, message, response)
 	defer httpResponse.Body.Close()
 	return
 }

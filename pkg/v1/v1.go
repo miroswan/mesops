@@ -23,6 +23,7 @@
 package v1
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -69,11 +70,15 @@ type MasterAPI interface {
 	CreateVolumes(ctx context.Context, call *mesos_v1_master.Call_CreateVolumes) (err error)
 	DestroyVolumes(ctx context.Context, call *mesos_v1_master.Call_DestroyVolumes) (err error)
 	GetWeights(ctx context.Context) (response *mesos_v1_master.Response, err error)
+	MarkAgentGone(ctx context.Context, call *mesos_v1_master.Call_MarkAgentGone) (
+		response *mesos_v1_master.Response, err error,
+	)
 }
 
 type AgentAPI interface {
 	GetAgents(ctx context.Context) (response *mesos_v1_master.Response, err error)
 	GetContainers(ctx context.Context) (response *mesos_v1_agent.Response, err error)
+	LaunchContainer(ctx context.Context, call *mesos_v1_agent.Call_LaunchContainer) (err error)
 	LaunchNestedContainer(ctx context.Context, call *mesos_v1_agent.Call_LaunchNestedContainer) (err error)
 	WaitNestedContainer(ctx context.Context, call *mesos_v1_agent.Call_WaitNestedContainer)
 	KillNestedContainer(ctx context.Context, call *mesos_v1_agent.Call_KillNestedContainer) (err error)
@@ -89,6 +94,14 @@ type AgentAPI interface {
 	GetState(ctx context.Context) (response *mesos_v1_agent.Response, err error)
 	GetTasks(ctx context.Context) (response *mesos_v1_agent.Response, err error)
 	GetVersion(ctx context.Context) (response *mesos_v1_agent.Response, err error)
+	PruneImages(ctx context.Context, call *mesos_v1_agent.Call_PruneImages) (err error)
+	AddResourceProviderConfig(ctx context.Context, call *mesos_v1_agent.Call_AddResourceProviderConfig) (err error)
+	UpdateResourceProviderConfig(ctx context.Context, call *mesos_v1_agent.Call_UpdateResourceProviderConfig) (err error)
+	RemoveResourceProviderConfig(ctx context.Context, call *mesos_v1_agent.Call_RemoveResourceProviderConfig) (err error)
+	LaunchNestedContainerSession(ctx context.Context, call *mesos_v1_agent.Call_LaunchNestedContainerSession, procesIOStream ProcessIOStream) (err error)
+	AttachContainerInput(ctx context.Context, call *mesos_v1_agent.Call_AttachContainerInput, procesIOStream ProcessIOStream) (err error)
+	AttachContainerOutput(ctx context.Context, call *mesos_v1_agent.Call_AttachContainerOutput, procesIOStream ProcessIOStream) (err error)
+	RemoveNestedContainer(ctx context.Context, call *mesos_v1_agent.Call_RemoveNestedContainer) (err error)
 }
 
 // HTTPError is a custom error type for HTTP errors outside of the 200 range.
@@ -305,6 +318,19 @@ func (c *client) doProto(ctx context.Context, body io.Reader, pb proto.Message) 
 			return
 		}
 	}
+	return
+}
+
+func (c *client) makeCall(
+	ctx context.Context, inputMessage proto.Message, outputMessage proto.Message,
+) (httpResponse *http.Response, err error) {
+	var b []byte
+	b, err = proto.Marshal(inputMessage)
+	if err != nil {
+		return
+	}
+	var buf io.Reader = bytes.NewBuffer(b)
+	httpResponse, err = c.doProtoWrapper(ctx, buf, outputMessage)
 	return
 }
 

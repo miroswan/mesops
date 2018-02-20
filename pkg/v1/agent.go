@@ -65,7 +65,7 @@ func (b *AgentBuilder) SetHTTPClient(httpclient *http.Client) *AgentBuilder {
 }
 
 // SetMaxRetries sets maxRetries for the Agent and returns a pointer to an
-// AgentBuilder. If SetMaxRetries is not called, it will be set to 15 seconds.
+// AgentBuilder. If SetMaxRetries is not called, it will be set to 10.
 // Each HTTP request will retry up to the provided value upon failure.
 // Binary exponential backoff is implemented as specified by RFC2616
 //

@@ -23,9 +23,7 @@
 package v1
 
 import (
-	"bytes"
 	"context"
-	"io"
 	"net/http"
 
 	"github.com/gogo/protobuf/proto"
@@ -51,18 +49,12 @@ func (m *Master) GetMaintenanceSchedule(ctx context.Context) (response *mesos_v1
 // UpdateMaintenanceSchedule updates the cluster’s maintenance schedule.
 func (m *Master) UpdateMaintenanceSchedule(ctx context.Context, call *mesos_v1_master.Call_UpdateMaintenanceSchedule) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_UPDATE_MAINTENANCE_SCHEDULE
-	var payload proto.Message = &mesos_v1_master.Call{
+	var message proto.Message = &mesos_v1_master.Call{
 		Type: &callType,
 		UpdateMaintenanceSchedule: call,
 	}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -71,18 +63,12 @@ func (m *Master) UpdateMaintenanceSchedule(ctx context.Context, call *mesos_v1_m
 // set of machines down.
 func (m *Master) StartMaintenance(ctx context.Context, call *mesos_v1_master.Call_StartMaintenance) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_START_MAINTENANCE
-	var payload proto.Message = &mesos_v1_master.Call{
+	var message proto.Message = &mesos_v1_master.Call{
 		Type:             &callType,
 		StartMaintenance: call,
 	}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	if err != nil {
-		return
-	}
-	var buf io.Reader = bytes.NewBuffer(b)
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
@@ -91,15 +77,12 @@ func (m *Master) StartMaintenance(ctx context.Context, call *mesos_v1_master.Cal
 // machines back up.
 func (m *Master) StopMaintenance(ctx context.Context, call *mesos_v1_master.Call_StopMaintenance) (err error) {
 	var callType mesos_v1_master.Call_Type = mesos_v1_master.Call_STOP_MAINTENANCE
-	var payload proto.Message = &mesos_v1_master.Call{
+	var message proto.Message = &mesos_v1_master.Call{
 		Type:            &callType,
 		StopMaintenance: call,
 	}
-	var b []byte
-	b, err = proto.Marshal(payload)
-	var buf io.Reader = bytes.NewBuffer(b)
 	var httpResponse *http.Response
-	httpResponse, err = m.client.doProtoWrapper(ctx, buf, nil)
+	httpResponse, err = m.client.makeCall(ctx, message, nil)
 	defer httpResponse.Body.Close()
 	return
 }
