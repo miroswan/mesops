@@ -6,11 +6,11 @@ set -ex
 systemctl start zookeeper.service
 /usr/share/zookeeper/bin/zkCli.sh create /mesos
 /usr/share/zookeeper/bin/zkCli.sh create /marathon
+systemctl restart zookeeper.service
 systemctl restart mesos_executors.slice
 systemctl restart mesos-master.service
 systemctl restart mesos-slave.service
 systemctl restart marathon.service
-systemctl restart zookeeper.service
 EOF
 
 install_script = <<-EOF

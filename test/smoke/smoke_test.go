@@ -6,6 +6,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/mesos/go-proto/mesos/v1"
+	"github.com/mesos/go-proto/mesos/v1/master"
+
 	"github.com/miroswan/mesops/pkg/v1"
 )
 
@@ -35,7 +38,31 @@ func TestGetVersion(t *testing.T) {
 		t.Error(err)
 	}
 	result := res.GetGetVersion().GetVersionInfo().GetVersion()
-	if result != "1.4.1" {
-		t.Errorf("expected 1.4.1: got %s", result)
+	if result != "1.5.0" {
+		t.Errorf("expected 1.5.0: got %s", result)
+	}
+}
+
+func TestSetLoggingLevel(t *testing.T) {
+	client := getMaster()
+	level := uint32(2)
+	nanoseconds := int64(600000)
+	call := &mesos_v1_master.Call_SetLoggingLevel{
+		Level: &level,
+		Duration: &mesos_v1.DurationInfo{
+			Nanoseconds: &nanoseconds,
+		},
+	}
+	err := client.SetLoggingLevel(context.Background(), call)
+	if err != nil {
+		t.Fatal(err)
+	}
+	data, err := client.GetLoggingLevel(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	result := data.GetLoggingLevel.GetLevel()
+	if level != 2 {
+		t.Errorf("expected 2, got %d", result)
 	}
 }
