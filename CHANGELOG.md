@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.4.0](https://github.com/miroswan/mesops/tree/v0.4.0) (2018-02-21)
+[Full Changelog](https://github.com/miroswan/mesops/compare/v0.3.4...v0.4.0)
+
+**Implemented enhancements:**
+
+- New methods and cleanup [\#11](https://github.com/miroswan/mesops/pull/11) ([miroswan](https://github.com/miroswan))
+
+**Merged pull requests:**
+
+- superficial updates [\#12](https://github.com/miroswan/mesops/pull/12) ([miroswan](https://github.com/miroswan))
+
 ## [v0.3.4](https://github.com/miroswan/mesops/tree/v0.3.4) (2018-02-02)
 [Full Changelog](https://github.com/miroswan/mesops/compare/v0.3.3...v0.3.4)
 
