@@ -11,7 +11,7 @@ show(){
 }
 
 error(){
-  printf "ERROR: $@\n"
+  (>&2 printf "ERROR: $@\n")
 }
 
 validate_args(){
@@ -123,5 +123,5 @@ main(){
 # Execute
 
 if [[ $BASH_SOURCE == $0 ]]; then
-  main $@
+  main $@ || exit $?
 fi
